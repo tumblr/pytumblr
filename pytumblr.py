@@ -14,21 +14,64 @@ class TumblrRestClient(object):
         """
         """
         self.host = host
-
         self.credentials = {
             'consumer_key' : consumer_key,
             'consumer_secret' : consumer_secret,
             'oauth_token' : oauth_token,
             'oauth_secret' : oauth_secret
         }
+
+    def info(self):
+        return self._get('/v2/user/info')
+
+    def likes(self, params={}):
+        return self._get('/v2/user/likes', params)
+
+    def following(self, params={}):
+        return self._get('/v2/user/following', params)
     
     def dashboard(self, params={}):
         return self._get('/v2/user/dashboard', params)
+
+    def tagged(self, tag, params={}):
+        params.update({'tag' : tag, 'api_key' : self.credentials['consumer_key']})
+        return self._get('/v2/tagged', params)
+
+    def posts(self, blogname, params={}):
+        url = '/v2/blog/%s/posts' % blogname
+        params.update({'api_key': self.credentials['consumer_key']})
+        return self._get(url,params)
+
+    def blog_info(self, blogname, params={}):
+        url = "/v2/blog/%s/info" % blogname
+        params.update({'api_key' : self.credentials['consumer_key']})
+        return self._get(url, params)
     
+    def followers(self, blogname, params={}):
+        url = "/v2/blog/%s/followers" % blogname
+        return self._get(url, params)
+
+    def blog_likes(self, blogname, params={}):
+        url = "/v2/blog/%s/likes" % blogname
+        params.update({'api_key' : self.credentials['consumer_key']})
+        return self._get(url, params)
+    
+    def queue(self, blogname, params={}):
+        url = "/v2/blog/%s/posts/queue" % blogname
+        return self._get(url, params)
+
+    def drafts(self, blogname, params={}):
+        url = "/v2/blog/%s/posts/draft" % blogname
+        return self._get(url, params)
+
+    def submission(self, blogname, params={}):
+        url = "/v2/blog/%s/posts/submission" % blogname
+        return self._get(url, params)
+
     def oauth_header_gen(self, method, url, params):
         """
         """
-        sig_params = dict([(x[0], urllib.quote(str(x[1])).replace('/','%2F')) for x in params.iteritems()]) 
+        sig_params = dict([(x[0], urllib.quote(str(x[1])).replace('/','%2F')) for x in params.iteritems()])
         sig_params['oauth_consumer_key'] = self.credentials['consumer_key']
         sig_params['oauth_nonce'] = str(time.time())[::-1]
         sig_params['oauth_signature_method'] = 'HMAC-SHA1'
@@ -46,15 +89,13 @@ class TumblrRestClient(object):
             #escapes all the key parameters, we then strip and url encode these guys
             [urllib.quote(k) +'%3D'+ urllib.quote(params[k]).replace('/','%2F') for k in sorted(params.keys())]
         )
-        print s
         s = s.replace('%257E','~')
-        return urllib.quote(base64.encodestring(hmac.new(self.credentials['oauth_secret'] + "&"+self.credentials['consumer_secret'],s,hashlib.sha1).digest()).strip()) 
+        return urllib.quote(base64.encodestring(hmac.new(self.credentials['consumer_secret'] +"&"+self.credentials['oauth_secret'],s,hashlib.sha1).digest()).strip()) 
     
     def _get(self, url, params={}):
         auth_header = self.oauth_header_gen("GET", url, params)
-        headers = {'Authorization' : auth_header, "Content-type": 'application/x-www-form-urlencoded'}
-        print headers
-        return requests.get('http://api.tumblr.com' + url, params=params, headers=headers)
+        header = {'Authorization' : auth_header, "Content-type": 'application/x-www-form-urlencoded'}
+        return requests.get('http://api.tumblr.com' + url, params=params, headers=header).json()
 
     def _post(self, url, params={}):
         pass
