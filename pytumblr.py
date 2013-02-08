@@ -98,4 +98,6 @@ class TumblrRestClient(object):
         return requests.get('http://api.tumblr.com' + url, params=params, headers=header).json()
 
     def _post(self, url, params={}):
-        pass
+        auth_header = self.oauth_header_gen("POST", url, params)
+        header = {'Authorization' : auth_header, "Content-type": 'application/x-www-form-urlencoded'}
+        return requests.post('http://api.tumblr.com' + url, params=params, headers=header).json()
