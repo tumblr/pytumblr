@@ -72,14 +72,34 @@ class TumblrRestClient(object):
 
     def drafts(self, blogname, params={}):
         url = "/v2/blog/%s/posts/draft" % blogname
-        validate_params('filter', params)
+        validate_params(['filter'], params)
         return self._get(url, params)
     
     def submission(self, blogname, params={}):
         url = "/v2/blog/%s/posts/submission" % blogname
         validate_params(["offset", "filter"], params)
         return self._get(url, params)
+
+    def follow(self, blogname):
+        url = "/v2/blog/user/follow"
+        params = {'url' : blogname}
+        return self._post(url, params)
     
+    def unfollow(self, blogname):
+        url = "/v2/blog/user/unfollow"
+        params = {'url' : blogname}
+        return self._post(url, params)
+
+    def like(self, params={}):
+        url = "/v2/user/like"
+        validate_params(['id', 'reblog_key'], params)
+        return self._post(url, params)
+    
+    def unlike(self, params={}):
+        url = "/v2/user/unlike"
+        validate_params(['id', 'reblog_key'], params)
+        return self._post(url, params)
+
     def post_photo(self, blogname, params={}):
         params.update({"type" : "photo"})
         valid_options = valid_post_options + ['caption', 'link', 'source', 'data', 'type']
