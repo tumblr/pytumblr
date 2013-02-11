@@ -103,36 +103,43 @@ class TumblrRestClient(object):
     def post_photo(self, blogname, params={}):
         params.update({"type" : "photo"})
         valid_options = valid_post_options + ['caption', 'link', 'source', 'data', 'type']
+        validate_params(valid_options, params)
         return self._send_post(blogname, params, valid_options)
 
     def post_text(self, blogname, params={}):
         params.update({"type" : "text"})
         valid_options = valid_post_options + ['text', 'body']
+        validate_params(valid_options, params)
         return self._send_post(blogname, params, valid_options)
     
     def post_quote(self, blogname, params={}):
         params.update({"type" : "quote"})
         valid_options = valid_post_options + ['quote', 'source']
+        validate_params(valid_options, params)
         return self._send_post(blogname, params, valid_options)
 
     def post_link(self, blogname, params={}):
         params.update({"type" : "link"}
         valid_options = valid_post_options + ['title', 'url', 'description']
+        validate_params(valid_options, params)
         return self._send_post(blogname, params, valid_options)
 
     def post_chat(self, blogname, params={}):
         params.update({"type" : "chat"}
         valid_options = valid_post_options + ['title', 'conversation']
+        validate_params(valid_options, params)
         return self._send_post(blogname, params, valid_options)
 
     def post_audio(self, blogname, params={}):
         params.update({"type" : "audio"}
         valid_options = valid_post_options + ['caption', 'external_url', 'data']
+        validate_params(valid_options, params)
         return self._send_post(blogname, params, valid_options)
 
     def post_video(self, blogname, params={}):
         params.update({"type" : "video"}
         valid_options = valid_post_options + ['caption', 'embed', 'data']
+        validate_params(valid_options, params)
         return self._send_post(blogname, params, valid_options)
     
     def _send_post(blogname, params, valid_options):
