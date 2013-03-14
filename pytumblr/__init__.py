@@ -4,6 +4,7 @@ import time
 import hashlib
 import base64
 import urllib
+
 from helpers import validate_params
 
 valid_post_options = ['type', 'state', 'tags', 'tweet', 'date', 'format', 'slug']
@@ -119,25 +120,25 @@ class TumblrRestClient(object):
         return self._send_post(blogname, params, valid_options)
 
     def post_link(self, blogname, params={}):
-        params.update({"type" : "link"}
+        params.update({"type" : "link"})
         valid_options = valid_post_options + ['title', 'url', 'description']
         validate_params(valid_options, params)
         return self._send_post(blogname, params, valid_options)
 
     def post_chat(self, blogname, params={}):
-        params.update({"type" : "chat"}
+        params.update({"type" : "chat"})
         valid_options = valid_post_options + ['title', 'conversation']
         validate_params(valid_options, params)
         return self._send_post(blogname, params, valid_options)
 
     def post_audio(self, blogname, params={}):
-        params.update({"type" : "audio"}
+        params.update({"type" : "audio"})
         valid_options = valid_post_options + ['caption', 'external_url', 'data']
         validate_params(valid_options, params)
         return self._send_post(blogname, params, valid_options)
 
     def post_video(self, blogname, params={}):
-        params.update({"type" : "video"}
+        params.update({"type" : "video"})
         valid_options = valid_post_options + ['caption', 'embed', 'data']
         validate_params(valid_options, params)
         return self._send_post(blogname, params, valid_options)
