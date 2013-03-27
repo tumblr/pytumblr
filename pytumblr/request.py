@@ -75,7 +75,7 @@ class TumblrRequest(object):
         params = dict(parse_qsl(faux_req.to_postdata()))
         
         content_type, body = self.encode_multipart_formdata(params, files)
-        headers = {'Content-Type': content_type, 'Content-Length': str(len(body)), 'Accept-Language': 'ja_JP'}
+        headers = {'Content-Type': content_type, 'Content-Length': str(len(body))}
         
         #Do a bytearray of the body and everything seems ok
         r = urllib2.Request(url, bytearray(body), headers)
