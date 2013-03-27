@@ -1,6 +1,7 @@
 from helpers import validate_params
 from request import TumblrRequest
 
+
 class TumblrRestClient(object):
     """
     A Python Client for the Tumblr API
@@ -82,7 +83,7 @@ class TumblrRestClient(object):
 
         :returns: a dict created from the JSON response
         """
-        kwargs.update({'tag' : tag})
+        kwargs.update({'tag': tag})
         return self.send_api_request("get", '/v2/tagged', kwargs, ['before', 'limit', 'filter', 'tag', 'api_key'], True)
 
     def posts(self, blogname, **kwargs):

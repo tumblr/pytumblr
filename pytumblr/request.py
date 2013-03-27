@@ -6,10 +6,12 @@ import json
 from urlparse import parse_qsl
 import oauth2 as oauth
 
+
 class TumblrRequest(object):
     """
     A simple request object that lets us query the Tumblr API
     """
+
     def __init__(self, consumer_key, consumer_secret="", oauth_token="", oauth_secret="", host="http://api.tumblr.com"):
         self.host = host
         self.consumer = oauth.Consumer(key=consumer_key, secret=consumer_secret)
@@ -122,7 +124,7 @@ class TumblrRequest(object):
             'oauth_version': "1.0",
             'oauth_nonce': oauth.generate_nonce(),
             'oauth_timestamp': int(time.time()),
-            'oauth_token' : self.token.key,
-            'oauth_consumer_key' : self.consumer.key
+            'oauth_token': self.token.key,
+            'oauth_consumer_key': self.consumer.key
         }
         return params
