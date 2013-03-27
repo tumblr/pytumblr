@@ -24,8 +24,8 @@ class TumblrRequest(object):
                        in the request
         :returns: a dict parsed of the JSON response
         """
-        url = self.host + url 
-        if params:        
+        url = self.host + url
+        if params:
             url = url + "?" + urllib.urlencode(params)
 
         client = oauth.Client(self.consumer, self.token)
@@ -35,7 +35,7 @@ class TumblrRequest(object):
 
     def post(self, url, params={}, files=[]):
         """
-        Issues a POST request against the API, allows for multipart data uploads.
+        Issues a POST request against the API, allows for multipart data uploads
 
         :param url: a string, the url you are requesting
         :param params: a dict, the key-value of all the parameters needed
@@ -45,7 +45,7 @@ class TumblrRequest(object):
         :returns: a dict parsed of the JSON response
         """
         url = self.host + url
-        try: 
+        try:
             if files:
                 return self.post_multipart(url, params, files)
             else:
@@ -55,9 +55,7 @@ class TumblrRequest(object):
                 return content
         except urllib2.HTTPError, e:
             return json.loads(e.read())
-            
-            
-    
+
     def post_multipart(self, url, params, files):
         """
         Generates and issues a multipart request for data files
@@ -73,15 +71,15 @@ class TumblrRequest(object):
         faux_req = oauth.Request(method="POST", url=url, parameters=params)
         faux_req.sign_request(oauth.SignatureMethod_HMAC_SHA1(), self.consumer, self.token)
         params = dict(parse_qsl(faux_req.to_postdata()))
-        
+
         content_type, body = self.encode_multipart_formdata(params, files)
         headers = {'Content-Type': content_type, 'Content-Length': str(len(body)), 'Accept-Language': 'ja_JP'}
-        
+
         #Do a bytearray of the body and everything seems ok
         r = urllib2.Request(url, bytearray(body), headers)
         content = json.loads(urllib2.urlopen(r).read())
         return content
-    
+
     def encode_multipart_formdata(self, fields, files):
         """
         Properly encodes the multipart body of the request
@@ -89,7 +87,7 @@ class TumblrRequest(object):
         :param fields: a dict, the parameters used in the request
         :param files:  a list of tuples containing information about the data files
 
-        :returns: the content for the body and the content-type value 
+        :returns: the content for the body and the content-type value
         """
         import mimetools
         import mimetypes
@@ -117,7 +115,7 @@ class TumblrRequest(object):
     def generate_oauth_params(self):
         """
         Generates the oauth parameters needed for multipart/form requests
-        
+
         :returns: a dictionary of the proper headers that can be used in the request
         """
         params = {

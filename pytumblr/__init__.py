@@ -45,9 +45,10 @@ class TumblrRestClient(object):
         """
         Gets the blogs that the current user is following.
         :param limit: an int, the number of likes you want returned
-        :param offset: an int, the blog you want to start at, used in pagination.
+        :param offset: an int, the blog you want to start at, for pagination.
 
-            client.following({'offset': 20, 'limit': 20}) # Start at the 20th blog and get 20 more blogs.
+            # Start at the 20th blog and get 20 more blogs.
+            client.following({'offset': 20, 'limit': 20})
 
         :returns: A dict created from the JSON response
         """
@@ -57,8 +58,8 @@ class TumblrRestClient(object):
         """
         Gets the dashboard of the current user
 
-        :param limit: an int, the number of posts you want returned 
-        :param offset: an int, the posts you want to start at, used in pagination.
+        :param limit: an int, the number of posts you want returned
+        :param offset: an int, the posts you want to start at, for pagination.
         :param type:   the type of post you want to return
         :param since_id:  return only posts that have appeared after this ID
         :param reblog_info: return reblog information about posts
@@ -75,7 +76,7 @@ class TumblrRestClient(object):
         :param tag: a string, the tag you want to look for
         :param before: a unix timestamp, the timestamp you want to start at to look at posts.
         :param limit: the number of results you want
-        :param filter: the post format that you want returned, html, text or raw.
+        :param filter: the post format that you want returned: html, text, raw
 
             client.tagged("gif", limit=10)
 
@@ -373,7 +374,7 @@ class TumblrRestClient(object):
         valid_options = ['type', 'state', 'tags', 'tweet', 'date', 'format', 'slug'] + valid_options
 
         if 'tags' in params:
-            # Take a list of tags and make them acceptable for upload 
+            # Take a list of tags and make them acceptable for upload
             params['tags'] = ",".join(params['tags'])
 
         return self.send_api_request("post", url, params, valid_options)
