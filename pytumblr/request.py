@@ -63,7 +63,7 @@ class TumblrRequest(object):
         Generates and issues a multipart request for data files
 
         :param url: a string, the url you are requesting
-        :param params: a dict, a key-value of all the parameters needed in the request
+        :param params: a dict, a key-value of all the parameters
         :param files:  a list, the list of tuples for your data
 
         :returns: a dict parsed from the JSON response
@@ -87,7 +87,7 @@ class TumblrRequest(object):
         Properly encodes the multipart body of the request
 
         :param fields: a dict, the parameters used in the request
-        :param files:  a list of tuples containing information about the data files
+        :param files:  a list of tuples containing information about the files
 
         :returns: the content for the body and the content-type value
         """
@@ -118,7 +118,8 @@ class TumblrRequest(object):
         """
         Generates the oauth parameters needed for multipart/form requests
 
-        :returns: a dictionary of the proper headers that can be used in the request
+        :returns: a dictionary of the proper headers that can be used
+                  in the request
         """
         params = {
             'oauth_version': "1.0",

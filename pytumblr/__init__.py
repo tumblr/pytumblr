@@ -12,11 +12,16 @@ class TumblrRestClient(object):
         Initializes the TumblrRestClient object, creating the TumblrRequest
         object which deals with all request formatting.
 
-        :param consumer_key: a string, the consumer key of your Tumblr Application
-        :param consumer_secret: a string, the consumer secret of your Tumblr Application
-        :param oauth_token: a string, the user specific token, received from the /access_token endpoint
-        :param oauth_secret: a string, the user specific secret, received from the /access_token endpoint
-        :param host: the host that are you trying to send information to, defaults to http://api.tumblr.com
+        :param consumer_key: a string, the consumer key of your
+                             Tumblr Application
+        :param consumer_secret: a string, the consumer secret of
+                                your Tumblr Application
+        :param oauth_token: a string, the user specific token, received
+                            from the /access_token endpoint
+        :param oauth_secret: a string, the user specific secret, received
+                             from the /access_token endpoint
+        :param host: the host that are you trying to send information to,
+                     defaults to http://api.tumblr.com
 
         :returns: None
         """
@@ -34,9 +39,10 @@ class TumblrRestClient(object):
         """
         Gets the current given user's likes
         :param limit: an int, the number of likes you want returned
-        :param offset: an int, the like you want to start at, used in pagination.
+        :param offset: an int, the like you want to start at, for pagination.
 
-            client.likes({'offset': 20, 'limit': 20}) # Start at the 20th like and get 20 more likes.
+            # Start at the 20th like and get 20 more likes.
+            client.likes({'offset': 20, 'limit': 20})
 
         :returns: A dict created from the JSON response
         """
@@ -75,7 +81,8 @@ class TumblrRestClient(object):
         Gets a list of posts tagged with the given tag
 
         :param tag: a string, the tag you want to look for
-        :param before: a unix timestamp, the timestamp you want to start at to look at posts.
+        :param before: a unix timestamp, the timestamp you want to start at
+                       to look at posts.
         :param limit: the number of results you want
         :param filter: the post format that you want returned: html, text, raw
 
@@ -90,12 +97,13 @@ class TumblrRestClient(object):
         """
         Cets a list of posts from a particular blog
 
-        :param blogname: a string, the blogname you want to look up posts for. eg: codingjester.tumblr.com
+        :param blogname: a string, the blogname you want to look up posts
+                         for. eg: codingjester.tumblr.com
         :param id: an int, the id of the post you are looking for on the blog
         :param tag: a string, the tag you are looking for on posts
         :param limit: an int, the number of results you want
         :param offset: an int, the offset of the posts you want to start at.
-        :param filter: the post format that you want returned. HTML, text or raw.
+        :param filter: the post format you want returned: HTML, text or raw.
 
         :returns: a dict created from the JSON response
         """
@@ -106,7 +114,8 @@ class TumblrRestClient(object):
         """
         Gets the information of the given blog
 
-        :param blogname: the name of the blog you want to information on. eg: codingjester.tumblr.com
+        :param blogname: the name of the blog you want to information
+                         on. eg: codingjester.tumblr.com
 
         :returns: a dict created from the JSON response of information
         """
@@ -117,9 +126,10 @@ class TumblrRestClient(object):
         """
         Gets the followers of the given blog
         :param limit: an int, the number of followers you want returned
-        :param offset: an int, the follower you want to start at, used in pagination.
+        :param offset: an int, the follower to start at, for pagination.
 
-            client.followers({'offset': 20, 'limit': 20}) # Start at the 20th blog and get 20 more blogs.
+            # Start at the 20th blog and get 20 more blogs.
+            client.followers({'offset': 20, 'limit': 20})
 
         :returns: A dict created from the JSON response
         """
@@ -130,9 +140,10 @@ class TumblrRestClient(object):
         """
         Gets the current given user's likes
         :param limit: an int, the number of likes you want returned
-        :param offset: an int, the like you want to start at, used in pagination.
+        :param offset: an int, the like you want to start at, for pagination.
 
-            client.blog_likes({'offset': 20, 'limit': 20}) # Start at the 20th like and get 20 more likes.
+            # Start at the 20th like and get 20 more likes.
+            client.blog_likes({'offset': 20, 'limit': 20})
 
         :returns: A dict created from the JSON response
         """
@@ -144,8 +155,8 @@ class TumblrRestClient(object):
         Gets posts that are currently in the blog's queue
 
         :param limit: an int, the number of posts you want returned
-        :param offset: an int, the post you want to start at, used in pagination.
-        :param filter: the post format that you want returned. HTML, text or raw.
+        :param offset: an int, the post you want to start at, for pagination.
+        :param filter: the post format that you want returned: HTML, text, raw.
 
         :returns: a dict created from the JSON response
         """
@@ -155,7 +166,7 @@ class TumblrRestClient(object):
     def drafts(self, blogname, **kwargs):
         """
         Gets posts that are currently in the blog's drafts
-        :param filter: the post format that you want returned. HTML, text or raw.
+        :param filter: the post format that you want returned: HTML, text, raw.
 
         :returns: a dict created from the JSON response
         """
@@ -166,8 +177,8 @@ class TumblrRestClient(object):
         """
         Gets posts that are currently in the blog's queue
 
-        :param offset: an int, the post you want to start at, used in pagination.
-        :param filter: the post format that you want returned. HTML, text or raw.
+        :param offset: an int, the post you want to start at, for pagination.
+        :param filter: the post format that you want returned: HTML, text, raw.
 
         :returns: a dict created from the JSON response
         """
