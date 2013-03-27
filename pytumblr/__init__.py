@@ -8,15 +8,15 @@ class TumblrRestClient(object):
 
     def __init__(self, consumer_key, consumer_secret="", oauth_token="", oauth_secret="", host="http://api.tumblr.com"):
         """
-        Initializes the TumblrRestClient object, creating the TumblrRequest object which deals with all
-        request formatting.
+        Initializes the TumblrRestClient object, creating the TumblrRequest
+        object which deals with all request formatting.
 
         :param consumer_key: a string, the consumer key of your Tumblr Application
         :param consumer_secret: a string, the consumer secret of your Tumblr Application
         :param oauth_token: a string, the user specific token, received from the /access_token endpoint
         :param oauth_secret: a string, the user specific secret, received from the /access_token endpoint
         :param host: the host that are you trying to send information to, defaults to http://api.tumblr.com
-        
+
         :returns: None
         """
         self.request = TumblrRequest(consumer_key, consumer_secret, oauth_token, oauth_secret, host)
@@ -28,31 +28,31 @@ class TumblrRestClient(object):
         :returns: A dict created from the JSON response
         """
         return self.send_api_request("get", "/v2/user/info")
-    
+
     def likes(self, **kwargs):
         """
         Gets the current given user's likes
         :param limit: an int, the number of likes you want returned
         :param offset: an int, the like you want to start at, used in pagination.
-            
+
             client.likes({'offset': 20, 'limit': 20}) # Start at the 20th like and get 20 more likes.
 
         :returns: A dict created from the JSON response
         """
         return self.send_api_request("get", "/v2/user/likes", kwargs, ["limit", "offset"])
-    
+
     def following(self, **kwargs):
         """
         Gets the blogs that the current user is following.
         :param limit: an int, the number of likes you want returned
         :param offset: an int, the blog you want to start at, used in pagination.
-            
+
             client.following({'offset': 20, 'limit': 20}) # Start at the 20th blog and get 20 more blogs.
 
         :returns: A dict created from the JSON response
         """
         return self.send_api_request("get", "/v2/user/following", kwargs, ["limit", "offset"])
-    
+
     def dashboard(self, **kwargs):
         """
         Gets the dashboard of the current user
@@ -77,13 +77,13 @@ class TumblrRestClient(object):
         :param limit: the number of results you want
         :param filter: the post format that you want returned, html, text or raw.
 
-            client.tagged("gif", limit=10) 
+            client.tagged("gif", limit=10)
 
         :returns: a dict created from the JSON response
         """
         kwargs.update({'tag' : tag})
         return self.send_api_request("get", '/v2/tagged', kwargs, ['before', 'limit', 'filter', 'tag', 'api_key'], True)
-    
+
     def posts(self, blogname, **kwargs):
         """
         Cets a list of posts from a particular blog
@@ -92,20 +92,20 @@ class TumblrRestClient(object):
         :param id: an int, the id of the post you are looking for on the blog
         :param tag: a string, the tag you are looking for on posts
         :param limit: an int, the number of results you want
-        :param offset: an int, the offset of the posts you want to start at. 
+        :param offset: an int, the offset of the posts you want to start at.
         :param filter: the post format that you want returned. HTML, text or raw.
-        
+
         :returns: a dict created from the JSON response
         """
         url = '/v2/blog/%s/posts' % blogname
         return self.send_api_request("get", url, kwargs, ['id', 'tag', 'limit', 'offset', 'reblog_info', 'notes_info', 'filter', 'api_key'], True)
-    
+
     def blog_info(self, blogname):
         """
         Gets the information of the given blog
 
         :param blogname: the name of the blog you want to information on. eg: codingjester.tumblr.com
-        
+
         :returns: a dict created from the JSON response of information
         """
         url = "/v2/blog/%s/info" % blogname
@@ -116,20 +116,20 @@ class TumblrRestClient(object):
         Gets the followers of the given blog
         :param limit: an int, the number of followers you want returned
         :param offset: an int, the follower you want to start at, used in pagination.
-            
+
             client.followers({'offset': 20, 'limit': 20}) # Start at the 20th blog and get 20 more blogs.
 
         :returns: A dict created from the JSON response
         """
         url = "/v2/blog/%s/followers" % blogname
         return self.send_api_request("get", url, kwargs, ['limit', 'offset'])
-    
+
     def blog_likes(self, blogname, **kwargs):
         """
         Gets the current given user's likes
         :param limit: an int, the number of likes you want returned
         :param offset: an int, the like you want to start at, used in pagination.
-            
+
             client.blog_likes({'offset': 20, 'limit': 20}) # Start at the 20th like and get 20 more likes.
 
         :returns: A dict created from the JSON response
@@ -140,7 +140,7 @@ class TumblrRestClient(object):
     def queue(self, blogname, **kwargs):
         """
         Gets posts that are currently in the blog's queue
-        
+
         :param limit: an int, the number of posts you want returned
         :param offset: an int, the post you want to start at, used in pagination.
         :param filter: the post format that you want returned. HTML, text or raw.
@@ -159,14 +159,14 @@ class TumblrRestClient(object):
         """
         url = "/v2/blog/%s/posts/draft" % blogname
         return self.send_api_request("get", url, kwargs, ['filter'])
-    
+
     def submission(self, blogname, **kwargs):
         """
         Gets posts that are currently in the blog's queue
-        
+
         :param offset: an int, the post you want to start at, used in pagination.
         :param filter: the post format that you want returned. HTML, text or raw.
-        
+
         :returns: a dict created from the JSON response
         """
         url = "/v2/blog/%s/posts/submission" % blogname
@@ -182,7 +182,7 @@ class TumblrRestClient(object):
         """
         url = "/v2/user/follow"
         return self.send_api_request("post", url, {'url': blog_url}, ['url'])
-    
+
     def unfollow(self, blog_url):
         """
         Unfollow the url of the given blog
@@ -197,7 +197,7 @@ class TumblrRestClient(object):
     def like(self, id, reblog_key):
         """
         Like the post of the given blog
-        
+
         :param id: an int, the id of the post you want to like
         :param reblog_key: a string, the reblog key of the post
 
@@ -206,7 +206,7 @@ class TumblrRestClient(object):
         url = "/v2/user/like"
         params = {'id': id, 'reblog_key': reblog_key}
         return self.send_api_request("post", url, params, ['id', 'reblog_key'])
-    
+
     def unlike(self, id, reblog_key):
         """
         Unlike the post of the given blog
@@ -259,11 +259,11 @@ class TumblrRestClient(object):
         """
         kwargs.update({"type": "text"})
         return self._send_post(blogname, kwargs, ['text', 'body'])
-    
+
     def create_quote(self, blogname, **kwargs):
         """
         Create a quote post on a blog
-        
+
         :param blogname: a string, the url of the blog you want to post to.
         :param state: a string, The state of the post.
         :param tags: a list of tags that you want applied to the post
@@ -282,7 +282,7 @@ class TumblrRestClient(object):
     def create_link(self, blogname, **kwargs):
         """
         Create a link post on a blog
-        
+
         :param blogname: a string, the url of the blog you want to post to.
         :param state: a string, The state of the post.
         :param tags: a list of tags that you want applied to the post
@@ -302,7 +302,7 @@ class TumblrRestClient(object):
     def create_chat(self, blogname, **kwargs):
         """
         Create a chat post on a blog
-        
+
         :param blogname: a string, the url of the blog you want to post to.
         :param state: a string, The state of the post.
         :param tags: a list of tags that you want applied to the post
@@ -312,7 +312,7 @@ class TumblrRestClient(object):
         :param slug: a string, a short text summary to the end of the post url
         :param title: a string, the title of the conversation
         :param converstaion: a string, the conversation you are posting
-        
+
         :returns: a dict created from the JSON response
         """
         kwargs.update({"type": "chat"})
@@ -321,7 +321,7 @@ class TumblrRestClient(object):
     def create_audio(self, blogname, **kwargs):
         """
         Create a audio post on a blog
-        
+
         :param blogname: a string, the url of the blog you want to post to.
         :param state: a string, The state of the post.
         :param tags: a list of tags that you want applied to the post
@@ -341,7 +341,7 @@ class TumblrRestClient(object):
     def create_video(self, blogname, **kwargs):
         """
         Create a audio post on a blog
-        
+
         :param blogname: a string, the url of the blog you want to post to.
         :param state: a string, The state of the post.
         :param tags: a list of tags that you want applied to the post
@@ -357,7 +357,7 @@ class TumblrRestClient(object):
         """
         kwargs.update({"type": "video"})
         return self._send_post(blogname, kwargs, ['caption', 'embed', 'data'])
-    
+
     def _send_post(self, blogname, params, valid_options):
         """
         Formats parameters and sends the API request off. Validates common parameters
@@ -371,13 +371,13 @@ class TumblrRestClient(object):
         """
         url = "/v2/blog/%s/post" % blogname
         valid_options = ['type', 'state', 'tags', 'tweet', 'date', 'format', 'slug'] + valid_options
-        
+
         if 'tags' in params:
             # Take a list of tags and make them acceptable for upload 
             params['tags'] = ",".join(params['tags'])
 
         return self.send_api_request("post", url, params, valid_options)
-    
+
     def send_api_request(self, method, url, params={}, valid_parameters=[], needs_api_key=False):
         """
         Sends the url with parameters to the requested url, validating them
@@ -390,10 +390,10 @@ class TumblrRestClient(object):
 
         :returns: a dict parsed from the JSON response
         """
-        if needs_api_key: 
+        if needs_api_key:
             params.update({'api_key': self.request.consumer.key})
             valid_parameters.append('api_key')
-        
+
         files = []
         if 'data' in params:
             if isinstance(params['data'], list):
@@ -401,9 +401,9 @@ class TumblrRestClient(object):
             else:
                 files = [('data', params['data'], open(params['data'], 'rb').read())]
             del params['data']
-        
+
         validate_params(valid_parameters, params)
         if method == "get":
-            return self.request.get(url, params) 
+            return self.request.get(url, params)
         else:
             return self.request.post(url, params, files)
