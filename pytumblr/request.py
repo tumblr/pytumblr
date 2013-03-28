@@ -32,8 +32,7 @@ class TumblrRequest(object):
 
         client = oauth.Client(self.consumer, self.token)
         resp, content = client.request(url, method="GET")
-        content = json.loads(content)
-        return content
+        return self.json_parse(content)
 
     def post(self, url, params={}, files=[]):
         """
@@ -52,11 +51,31 @@ class TumblrRequest(object):
                 return self.post_multipart(url, params, files)
             else:
                 client = oauth.Client(self.consumer, self.token)
-                resp, content = client.request(url, method="POST", body=urllib.urlencode(params), headers={'Accept-Language': 'ja_JP'})
-                content = json.loads(content)
-                return content
+                resp, content = client.request(url, method="POST", body=urllib.urlencode(params))
+                return self.json_parse(content)
         except urllib2.HTTPError, e:
-            return json.loads(e.read())
+            return self.json_parse(e.read())
+
+    def json_parse(self, content):
+        """
+        Wraps and abstracts content validation and JSON parsing
+        to make sure the user gets the correct response.
+        
+        :param content: The content returned from the web request to be parsed as json
+        
+        :returns: a dict of the json response
+        """
+        try:
+            data = json.loads(content)
+        except ValueError, e:
+            data = {'meta': { 'status': 500, 'msg': 'Server Error'}, 'response': {"error": "Malformed JSON or HTML was returned."}}
+        
+        #We only really care about the response if we succeed
+        #and the error if we fail
+        if data['meta']['status'] in [200, 201]:
+            return data['response']
+        else:
+            return data
 
     def post_multipart(self, url, params, files):
         """
@@ -79,8 +98,8 @@ class TumblrRequest(object):
 
         #Do a bytearray of the body and everything seems ok
         r = urllib2.Request(url, bytearray(body), headers)
-        content = json.loads(urllib2.urlopen(r).read())
-        return content
+        content = urllib2.urlopen(r).read()
+        return self.json_parse(content)
 
     def encode_multipart_formdata(self, fields, files):
         """
