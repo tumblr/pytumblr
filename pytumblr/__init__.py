@@ -107,7 +107,7 @@ class TumblrRestClient(object):
 
     def posts(self, blogname, **kwargs):
         """
-        Cets a list of posts from a particular blog
+        Gets a list of posts from a particular blog
 
         :param blogname: a string, the blogname you want to look up posts
                          for. eg: codingjester.tumblr.com
@@ -397,6 +397,50 @@ class TumblrRestClient(object):
         """
         kwargs.update({"type": "video"})
         return self._send_post(blogname, kwargs, ['caption', 'embed', 'data'])
+
+    @validate_blogname
+    def reblog(self, blogname, **kwargs):
+        """
+        Creates a reblog on the given blogname
+
+        :param blogname: a string, the url of the blog you want to reblog to
+        :param id: an int, the post id that you are reblogging
+        :param reblog_key: a string, the reblog key of the post
+
+        :returns: a dict created from the JSON response
+        """
+        url = "/v2/blog/%s/post/reblog" % blogname
+        return self.send_api_request('post', url, kwargs, ['id', 'reblog_key'])
+
+    @validate_blogname
+    def delete_post(self, blogname, id):
+        """
+        Deletes a post with the given id
+
+        :param blogname: a string, the url of the blog you want to delete from
+        :param id: an int, the post id that you want to delete
+
+        :returns: a dict created from the JSON response
+        """
+        url = "/v2/blog/%s/post/delete" % blogname
+        return self.send_api_request('post', url, {'id': id}, ['id'])
+
+    @validate_blogname
+    def edit_post(self, blogname, **kwargs):
+        """
+        Edits a post with a given id
+
+        :param blogname: a string, the url of the blog you want to edit
+        :param tags: a list of tags that you want applied to the post
+        :param tweet: a string, the customized tweet that you want
+        :param date: a string, the GMT date and time of the post
+        :param format: a string, sets the format type of the post. html or markdown
+        :param slug: a string, a short text summary to the end of the post url
+
+        :returns: a dict created from the JSON response
+        """
+        url = "/v2/blog/%s/post/edit" % blogname
+        return self.send_api_request('post', url, kwargs)
 
     def _send_post(self, blogname, params, valid_options):
         """
