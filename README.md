@@ -67,9 +67,6 @@ client.create_video(blogName, **params)
 ### Tagged Methods
 
 ```python
-### Tagged Methods
-
-``` javascript
 client.tagged(tag, **params);
 ```
 
