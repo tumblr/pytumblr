@@ -104,7 +104,8 @@ class TumblrRestClient(object):
         """
         kwargs.update({'tag': tag})
         return self.send_api_request("get", '/v2/tagged', kwargs, ['before', 'limit', 'filter', 'tag', 'api_key'], True)
-
+    
+    @validate_blogname
     def posts(self, blogname, **kwargs):
         """
         Gets a list of posts from a particular blog
