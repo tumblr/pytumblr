@@ -53,7 +53,7 @@ client.edit(blogName, **params);
 
 client.reblog(blogName, id, reblogkey);
 
-client.deletePost(blogName, id);
+client.delete(blogName, id);
 
 client.create_photo(blogName, **params)
 client.create_quote(blogName, **params)
