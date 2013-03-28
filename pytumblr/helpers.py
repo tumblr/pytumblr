@@ -1,6 +1,6 @@
 def validate_params(valid_options, params):
     """
-    A decorater that helps us validate the parameters for the request
+    Helps us validate the parameters for the request
 
     :param valid_options: a list of strings of valid options for the
                           api request
@@ -25,3 +25,21 @@ def validate_params(valid_options, params):
     if disallowed_fields:
         field_strings = ",".join(disallowed_fields)
         raise Exception("%s are not allowed fields" % field_strings)
+
+def validate_blogname(fn):
+    """
+    Decorator to validate the blogname and let you pass in a blogname like:
+        client.blog_info('codingjester')
+    or
+        client.blog_info('codingjester.tumblr.com')
+    or 
+        client.blog_info('blog.johnbunting.me')
+    
+    and query all the same blog.
+    """
+    def add_dot_tumblr(*args, **kwargs):
+        if (len(args) > 1 and ("." not in args[1])):
+            args = list(args)
+            args[1] += ".tumblr.com"
+        return fn(*args, **kwargs)
+    return add_dot_tumblr
