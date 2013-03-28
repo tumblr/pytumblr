@@ -5,7 +5,7 @@ import json
 
 from urlparse import parse_qsl
 import oauth2 as oauth
-
+from httplib2 import RedirectLimit
 
 class TumblrRequest(object):
     """
@@ -31,7 +31,12 @@ class TumblrRequest(object):
             url = url + "?" + urllib.urlencode(params)
 
         client = oauth.Client(self.consumer, self.token)
-        resp, content = client.request(url, method="GET")
+        try:
+            client.follow_redirects = False
+            resp, content = client.request(url, method="GET", redirections=False)
+        except RedirectLimit, e:
+            resp, content = e.args
+
         return self.json_parse(content)
 
     def post(self, url, params={}, files=[]):
@@ -72,7 +77,7 @@ class TumblrRequest(object):
         
         #We only really care about the response if we succeed
         #and the error if we fail
-        if data['meta']['status'] in [200, 201]:
+        if data['meta']['status'] in [200, 201, 301]:
             return data['response']
         else:
             return data
