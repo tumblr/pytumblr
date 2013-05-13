@@ -414,7 +414,7 @@ class TumblrRestClient(object):
         return self.send_api_request('post', url, kwargs, ['id', 'reblog_key'])
 
     @validate_blogname
-    def delete_post(self, blogname, id):
+    def delete(self, blogname, id):
         """
         Deletes a post with the given id
 
@@ -427,7 +427,7 @@ class TumblrRestClient(object):
         return self.send_api_request('post', url, {'id': id}, ['id'])
 
     @validate_blogname
-    def edit_post(self, blogname, **kwargs):
+    def edit(self, blogname, **kwargs):
         """
         Edits a post with a given id
 
