@@ -49,11 +49,11 @@ client.submissions('codingjester')
 ### Post Methods
 
 ```python
-client.edit(blogName, **params);
+client.edit_post(blogName, **params);
 
 client.reblog(blogName, id, reblogkey);
 
-client.delete(blogName, id);
+client.delete_post(blogName, id);
 
 client.create_photo(blogName, **params)
 client.create_quote(blogName, **params)
