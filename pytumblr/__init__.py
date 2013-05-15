@@ -294,7 +294,7 @@ class TumblrRestClient(object):
         :returns: a dict created from the JSON response
         """
         kwargs.update({"type": "text"})
-        return self._send_post(blogname, kwargs, ['text', 'body'])
+        return self._send_post(blogname, kwargs, ['text', 'title', 'body'])
 
     @validate_blogname
     def create_quote(self, blogname, **kwargs):
