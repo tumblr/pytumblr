@@ -209,7 +209,7 @@ class TumblrRestClient(object):
         """
         Follow the url of the given blog
 
-        :param blog_url: a string, the blog url you want to follow
+        :param blogname: a string, the blog url you want to follow
 
         :returns: a dict created from the JSON response
         """
@@ -221,12 +221,12 @@ class TumblrRestClient(object):
         """
         Unfollow the url of the given blog
 
-        :param blog_url: a string, the blog url you want to follow
+        :param blogname: a string, the blog url you want to follow
 
         :returns: a dict created from the JSON response
         """
         url = "/v2/user/unfollow"
-        return self.send_api_request("post", url, {'url': blog_url}, ['url'])
+        return self.send_api_request("post", url, {'url': blogname}, ['url'])
 
     def like(self, id, reblog_key):
         """
