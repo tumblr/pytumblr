@@ -22,9 +22,7 @@ class TumblrRestClientTest(unittest.TestCase):
                                body='{"meta": {"status": 200, "msg": "OK"}, "response": {"posts": [] } }')
 
         response = self.client.dashboard()
-        assert response['meta']['status'] == 200
-        assert response['meta']['msg'] == "OK"
-        assert response['response']['posts'] == []
+        assert response['posts'] == []
 
     @httprettified
     def test_posts(self):
@@ -32,9 +30,7 @@ class TumblrRestClientTest(unittest.TestCase):
                                body='{"meta": {"status": 200, "msg": "OK"}, "response": {"posts": [] } }')
 
         response = self.client.posts('codingjester.tumblr.com')
-        assert response['meta']['status'] == 200
-        assert response['meta']['msg'] == "OK"
-        assert response['response']['posts'] == []
+        assert response['posts'] == []
 
     @httprettified
     def test_blogInfo(self):
@@ -42,9 +38,7 @@ class TumblrRestClientTest(unittest.TestCase):
                                body='{"meta": {"status": 200, "msg": "OK"}, "response": {"blog": {} } }')
 
         response = self.client.blog_info('codingjester.tumblr.com')
-        assert response['meta']['status'] == 200
-        assert response['meta']['msg'] == "OK"
-        assert response['response']['blog'] == {}
+        assert response['blog'] == {}
 
     @httprettified
     def test_followers(self):
@@ -52,9 +46,7 @@ class TumblrRestClientTest(unittest.TestCase):
                                body='{"meta": {"status": 200, "msg": "OK"}, "response": {"users": [] } }')
 
         response = self.client.followers('codingjester.tumblr.com')
-        assert response['meta']['status'] == 200
-        assert response['meta']['msg'] == "OK"
-        assert response['response']['users'] == []
+        assert response['users'] == []
 
     @httprettified
     def test_blogLikes(self):
@@ -62,8 +54,7 @@ class TumblrRestClientTest(unittest.TestCase):
                                body='{"meta": {"status": 200, "msg": "OK"}, "response": {"liked_posts": [] } }')
 
         response = self.client.blog_likes('codingjester.tumblr.com')
-        assert response['meta']['status'] == 200
-        assert response['meta']['msg'] == "OK"
+        assert response['liked_posts'] == []
 
     @httprettified
     def test_queue(self):
@@ -71,8 +62,7 @@ class TumblrRestClientTest(unittest.TestCase):
                                body='{"meta": {"status": 200, "msg": "OK"}, "response": {"posts": [] } }')
 
         response = self.client.queue('codingjester.tumblr.com')
-        assert response['meta']['status'] == 200
-        assert response['meta']['msg'] == "OK"
+        assert response['posts'] == []
 
     @httprettified
     def test_drafts(self):
@@ -80,8 +70,7 @@ class TumblrRestClientTest(unittest.TestCase):
                                body='{"meta": {"status": 200, "msg": "OK"}, "response": {"posts": [] } }')
 
         response = self.client.drafts('codingjester.tumblr.com')
-        assert response['meta']['status'] == 200
-        assert response['meta']['msg'] == "OK"
+        assert response['posts'] == []
 
     @httprettified
     def test_submissions(self):
@@ -89,8 +78,7 @@ class TumblrRestClientTest(unittest.TestCase):
                                body='{"meta": {"status": 200, "msg": "OK"}, "response": {"posts": [] } }')
 
         response = self.client.submission('codingjester.tumblr.com')
-        assert response['meta']['status'] == 200
-        assert response['meta']['msg'] == "OK"
+        assert response['posts'] == []
 
     @httprettified
     def test_follow(self):
@@ -98,8 +86,7 @@ class TumblrRestClientTest(unittest.TestCase):
                                body='{"meta": {"status": 200, "msg": "OK"}, "response": []}')
 
         response = self.client.follow("codingjester.tumblr.com")
-        assert response['meta']['status'] == 200
-        assert response['meta']['msg'] == "OK"
+        assert response == []
 
         experimental_body = parse_qs(HTTPretty.last_request.body)
         assert HTTPretty.last_request.method == "POST"
@@ -111,8 +98,7 @@ class TumblrRestClientTest(unittest.TestCase):
                                body='{"meta": {"status": 200, "msg": "OK"}, "response": []}')
 
         response = self.client.unfollow("codingjester.tumblr.com")
-        assert response['meta']['status'] == 200
-        assert response['meta']['msg'] == "OK"
+        assert response == []
 
         experimental_body = parse_qs(HTTPretty.last_request.body)
         assert HTTPretty.last_request.method == "POST"
@@ -124,8 +110,7 @@ class TumblrRestClientTest(unittest.TestCase):
                                body='{"meta": {"status": 200, "msg": "OK"}, "response": []}')
 
         response = self.client.like('123', "adsfsadf")
-        assert response['meta']['status'] == 200
-        assert response['meta']['msg'] == "OK"
+        assert response == []
 
         experimental_body = parse_qs(HTTPretty.last_request.body)
         assert HTTPretty.last_request.method == "POST"
@@ -138,8 +123,7 @@ class TumblrRestClientTest(unittest.TestCase):
                                body='{"meta": {"status": 200, "msg": "OK"}, "response": []}')
 
         response = self.client.unlike('123', "adsfsadf")
-        assert response['meta']['status'] == 200
-        assert response['meta']['msg'] == "OK"
+        assert response == []
 
         experimental_body = parse_qs(HTTPretty.last_request.body)
         assert HTTPretty.last_request.method == "POST"
@@ -152,8 +136,7 @@ class TumblrRestClientTest(unittest.TestCase):
                                body='{"meta": {"status": 200, "msg": "OK"}, "response": []}')
 
         response = self.client.info()
-        assert response['meta']['status'] == 200
-        assert response['meta']['msg'] == "OK"
+        assert response == []
 
     @httprettified
     def test_likes(self):
@@ -161,8 +144,7 @@ class TumblrRestClientTest(unittest.TestCase):
                                body='{"meta": {"status": 200, "msg": "OK"}, "response": []}')
 
         response = self.client.likes()
-        assert response['meta']['status'] == 200
-        assert response['meta']['msg'] == "OK"
+        assert response == []
 
     @httprettified
     def test_following(self):
@@ -170,8 +152,7 @@ class TumblrRestClientTest(unittest.TestCase):
                                body='{"meta": {"status": 200, "msg": "OK"}, "response": []}')
 
         response = self.client.following()
-        assert response['meta']['status'] == 200
-        assert response['meta']['msg'] == "OK"
+        assert response == []
 
     @httprettified
     def test_tagged(self):
@@ -179,8 +160,7 @@ class TumblrRestClientTest(unittest.TestCase):
                                body='{"meta": {"status": 200, "msg": "OK"}, "response": []}')
 
         response = self.client.tagged('food')
-        assert response['meta']['status'] == 200
-        assert response['meta']['msg'] == "OK"
+        assert response == []
 
     @httprettified
     def test_create_text(self):
@@ -188,8 +168,7 @@ class TumblrRestClientTest(unittest.TestCase):
                                body='{"meta": {"status": 201, "msg": "OK"}, "response": []}')
 
         response = self.client.create_text('codingjester.tumblr.com', body="Testing")
-        assert response['meta']['status'] == 201
-        assert response['meta']['msg'] == "OK"
+        assert response == []
 
     @httprettified
     def test_create_link(self):
@@ -197,30 +176,27 @@ class TumblrRestClientTest(unittest.TestCase):
                                body='{"meta": {"status": 201, "msg": "OK"}, "response": []}')
 
         response = self.client.create_link('codingjester.tumblr.com', url="http://google.com", tags=['omg', 'nice'])
-        assert response['meta']['status'] == 201
-        assert response['meta']['msg'] == "OK"
+        assert response == []
 
         experimental_body = parse_qs(HTTPretty.last_request.body)
         assert HTTPretty.last_request.method == "POST"
         assert experimental_body['tags'][0] == "omg,nice"
 
     @httprettified
-    def test_create_text(self):
+    def test_create_quote(self):
         HTTPretty.register_uri(HTTPretty.POST, 'http://api.tumblr.com/v2/blog/codingjester.tumblr.com/post',
                                body='{"meta": {"status": 201, "msg": "OK"}, "response": []}')
 
         response = self.client.create_quote('codingjester.tumblr.com', quote="It's better to love and lost, than never have loved at all.")
-        assert response['meta']['status'] == 201
-        assert response['meta']['msg'] == "OK"
+        assert response == []
 
     @httprettified
-    def test_create_text(self):
+    def test_create_chat(self):
         HTTPretty.register_uri(HTTPretty.POST, 'http://api.tumblr.com/v2/blog/codingjester.tumblr.com/post',
                                body='{"meta": {"status": 201, "msg": "OK"}, "response": []}')
 
         response = self.client.create_chat('codingjester.tumblr.com', conversation="JB: Testing is rad.\nJC: Hell yeah.")
-        assert response['meta']['status'] == 201
-        assert response['meta']['msg'] == "OK"
+        assert response == []
 
     @httprettified
     def test_create_photo(self):
@@ -228,8 +204,7 @@ class TumblrRestClientTest(unittest.TestCase):
                                body='{"meta": {"status": 201, "msg": "OK"}, "response": []}')
 
         response = self.client.create_photo('codingjester.tumblr.com', source="http://media.tumblr.com/image.jpg")
-        assert response['meta']['status'] == 201
-        assert response['meta']['msg'] == "OK"
+        assert response == []
 
         #with mock.patch('__builtin__.open') as my_mock:
         #    my_mock.return_value.__enter__ = lambda s: s
@@ -249,8 +224,7 @@ class TumblrRestClientTest(unittest.TestCase):
                                body='{"meta": {"status": 201, "msg": "OK"}, "response": []}')
 
         response = self.client.create_audio('codingjester.tumblr.com', external_url="http://media.tumblr.com/audio.mp3")
-        assert response['meta']['status'] == 201
-        assert response['meta']['msg'] == "OK"
+        assert response == []
 
     @httprettified
     def test_create_video(self):
@@ -258,8 +232,7 @@ class TumblrRestClientTest(unittest.TestCase):
                                body='{"meta": {"status": 201, "msg": "OK"}, "response": []}')
 
         response = self.client.create_video('codingjester.tumblr.com', embed="blahblahembed")
-        assert response['meta']['status'] == 201
-        assert response['meta']['msg'] == "OK"
+        assert response == []
 
 if __name__ == "__main__":
     unittest.main()
