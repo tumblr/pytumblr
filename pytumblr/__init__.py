@@ -117,11 +117,12 @@ class TumblrRestClient(object):
         :param limit: an int, the number of results you want
         :param offset: an int, the offset of the posts you want to start at.
         :param filter: the post format you want returned: HTML, text or raw.
+        :param type: the type of post you want returned, e.g. video
 
         :returns: a dict created from the JSON response
         """
         url = '/v2/blog/%s/posts' % blogname
-        return self.send_api_request("get", url, kwargs, ['id', 'tag', 'limit', 'offset', 'reblog_info', 'notes_info', 'filter', 'api_key'], True)
+        return self.send_api_request("get", url, kwargs, ['id', 'tag', 'limit', 'offset', 'reblog_info', 'notes_info', 'filter', 'type', 'api_key'], True)
     
     @validate_blogname
     def blog_info(self, blogname):
