@@ -459,7 +459,7 @@ class TumblrRestClient(object):
 
         if 'tags' in params:
             # Take a list of tags and make them acceptable for upload
-            params['tags'] = ",".join(params['tags'])
+            params['tags'] = [x.strip() for x in params['tags'].split(',')]
 
         return self.send_api_request("post", url, params, valid_options)
 
