@@ -106,7 +106,7 @@ class TumblrRestClient(object):
         return self.send_api_request("get", '/v2/tagged', kwargs, ['before', 'limit', 'filter', 'tag', 'api_key'], True)
     
     @validate_blogname
-    def posts(self, blogname, **kwargs):
+    def posts(self, blogname, type=None, **kwargs):
         """
         Gets a list of posts from a particular blog
 
@@ -117,10 +117,14 @@ class TumblrRestClient(object):
         :param limit: an int, the number of results you want
         :param offset: an int, the offset of the posts you want to start at.
         :param filter: the post format you want returned: HTML, text or raw.
+        :param type: the type of posts you want returned, e.g. video. If omitted returns all post types.
 
         :returns: a dict created from the JSON response
         """
-        url = '/v2/blog/%s/posts' % blogname
+        if type is None:
+            url = '/v2/blog/%s/posts' % blogname
+        else:
+            url = '/v2/blog/%s/posts/%s' % (blogname,type)
         return self.send_api_request("get", url, kwargs, ['id', 'tag', 'limit', 'offset', 'reblog_info', 'notes_info', 'filter', 'api_key'], True)
     
     @validate_blogname
