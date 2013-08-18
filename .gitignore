@@ -4,3 +4,4 @@ venv
 *.egg-info
 build
 dist
+.coverage
