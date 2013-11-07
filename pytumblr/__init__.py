@@ -415,7 +415,13 @@ class TumblrRestClient(object):
         :returns: a dict created from the JSON response
         """
         url = "/v2/blog/%s/post/reblog" % blogname
-        return self.send_api_request('post', url, kwargs, ['id', 'reblog_key'])
+
+        valid_options = ['id', 'reblog_key', 'type', 'state', 'tags', 'tweet', 'date', 'format', 'slug']
+        if 'tags' in kwargs:
+            # Take a list of tags and make them acceptable for upload
+            params['tags'] = ",".join(params['tags'])
+
+        return self.send_api_request('post', url, kwargs, valid_options)
 
     @validate_blogname
     def delete_post(self, blogname, id):
