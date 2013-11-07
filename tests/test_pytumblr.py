@@ -33,6 +33,23 @@ class TumblrRestClientTest(unittest.TestCase):
         assert response['posts'] == []
 
     @httprettified
+    def test_posts_with_type(self):
+        HTTPretty.register_uri(HTTPretty.GET, 'http://api.tumblr.com/v2/blog/seejohnrun.tumblr.com/posts/photo',
+                               body='{"meta": {"status": 200, "msg": "OK"}, "response": {"posts": [] } }')
+
+        response = self.client.posts('seejohnrun', 'photo')
+        assert response['posts'] == []
+
+    @httprettified
+    def test_posts_with_type_and_arg(self):
+        HTTPretty.register_uri(HTTPretty.GET, 'http://api.tumblr.com/v2/blog/seejohnrun.tumblr.com/posts/photo?limit=1',
+                               body='{"meta": {"status": 200, "msg": "OK"}, "response": {"posts": [] } }')
+
+        args = { 'limit': 1 }
+        response = self.client.posts('seejohnrun', 'photo', **args)
+        assert response['posts'] == []
+
+    @httprettified
     def test_blogInfo(self):
         HTTPretty.register_uri(HTTPretty.GET, 'http://api.tumblr.com/v2/blog/codingjester.tumblr.com/info',
                                body='{"meta": {"status": 200, "msg": "OK"}, "response": {"blog": {} } }')
