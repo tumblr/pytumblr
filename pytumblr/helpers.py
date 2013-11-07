@@ -32,9 +32,9 @@ def validate_blogname(fn):
         client.blog_info('codingjester')
     or
         client.blog_info('codingjester.tumblr.com')
-    or 
+    or
         client.blog_info('blog.johnbunting.me')
-    
+
     and query all the same blog.
     """
     def add_dot_tumblr(*args, **kwargs):
