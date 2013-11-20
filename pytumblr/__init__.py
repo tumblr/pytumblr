@@ -125,7 +125,7 @@ class TumblrRestClient(object):
             url = '/v2/blog/%s/posts' % blogname
         else:
             url = '/v2/blog/%s/posts/%s' % (blogname,type)
-        return self.send_api_request("get", url, kwargs, ['id', 'tag', 'limit', 'offset', 'reblog_info', 'notes_info', 'filter', 'api_key'], True)
+        return self.send_api_request("get", url, kwargs, ['id', 'tag', 'limit', 'offset', 'reblog_info', 'notes_info', 'filter', 'type', 'api_key'], True)
     
     @validate_blogname
     def blog_info(self, blogname):
