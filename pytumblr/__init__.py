@@ -416,11 +416,10 @@ class TumblrRestClient(object):
         """
         url = "/v2/blog/%s/post/reblog" % blogname
 
-        valid_options = ['id', 'reblog_key', 'type', 'state', 'tags', 'tweet', 'date', 'format', 'slug']
+        valid_options = ['id', 'reblog_key', 'comment', 'type', 'state', 'tags', 'tweet', 'date', 'format', 'slug']
         if 'tags' in kwargs:
             # Take a list of tags and make them acceptable for upload
-            params['tags'] = ",".join(params['tags'])
-
+            kwargs['tags'] = ",".join(kwargs['tags'])
         return self.send_api_request('post', url, kwargs, valid_options)
 
     @validate_blogname
