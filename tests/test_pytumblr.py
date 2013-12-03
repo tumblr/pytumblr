@@ -126,7 +126,7 @@ class TumblrRestClientTest(unittest.TestCase):
         HTTPretty.register_uri(HTTPretty.POST, 'http://api.tumblr.com/v2/blog/seejohnrun.tumblr.com/post/reblog',
                                body='{"meta": {"status": 200, "msg": "OK"}, "response": []}')
 
-        response = self.client.reblog('seejohnrun', id='123', reblog_key="adsfsadf", state='coolguy')
+        response = self.client.reblog('seejohnrun', id='123', reblog_key="adsfsadf", state='coolguy', tags=['hello', 'world'])
         assert response == []
 
         experimental_body = parse_qs(HTTPretty.last_request.body)
@@ -134,6 +134,7 @@ class TumblrRestClientTest(unittest.TestCase):
         assert experimental_body['id'][0] == '123'
         assert experimental_body['reblog_key'][0] == 'adsfsadf'
         assert experimental_body['state'][0] == 'coolguy'
+        assert experimental_body['tags'][0] == 'hello,world'
 
     @httprettified
     def test_like(self):
