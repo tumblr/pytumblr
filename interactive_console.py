@@ -8,8 +8,10 @@ import code
 import oauth2 as oauth
 
 def new_oauth(json_path):
-    '''Return the consumer and oauth tokens with three-legged OAuth process and save in a json file in the user's
-    home directory.'''
+    '''
+    Return the consumer and oauth tokens with three-legged OAuth process and
+    save in a json file in the user's home directory.
+    '''
 
     print 'Retrieve consumer key and consumer secret from http://www.tumblr.com/oauth/apps'
     consumer_key = raw_input('Paste the consumer key here: ')
@@ -66,8 +68,12 @@ if __name__ == '__main__':
         tokens = json.load(json_file)
         json_file.close()
 
-    client = pytumblr.TumblrRestClient(tokens['consumer_key'], tokens['consumer_secret'], tokens['oauth_token'],
-                                        tokens['oauth_token_secret'])
+    client = pytumblr.TumblrRestClient(
+        tokens['consumer_key'],
+        tokens['consumer_secret'],
+        tokens['oauth_token'],
+        tokens['oauth_token_secret']
+    )
 
     print 'pytumblr client created. You may run pytumblr commands prefixed with "client".\n'
 
