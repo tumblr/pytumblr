@@ -70,4 +70,4 @@ if __name__ == '__main__':
 
     print 'pytumblr client created. You may run pytumblr commands prefixed with "client".\n'
 
-    code.interact(local=dict(globals(), **locals()))
+    code.interact(local=dict(globals(), **{'client': client}))
