@@ -24,30 +24,31 @@ def new_oauth(json_path):
 
     # Get request token
     resp, content = client.request(request_token_url, "POST")
-    output = content.split('&')
-    request_token =  dict(urlparse.parse_qsl(content))
+    request_token =  urlparse.parse_qs(content)
 
     # Redirect to authentication page
-    print '\nPlease go here and authorize:\n%s?oauth_token=%s' % (authorize_url, request_token['oauth_token'])
+    print '\nPlease go here and authorize:\n%s?oauth_token=%s' % (authorize_url, request_token['oauth_token'][0])
     redirect_response = raw_input('Allow then paste the full redirect URL here:\n')
 
     # Retrieve oauth verifier
     url = urlparse.urlparse(redirect_response)
     query_dict = urlparse.parse_qs(url.query)
-    oauth_verifier = query_dict['oauth_verifier']
+    oauth_verifier = query_dict['oauth_verifier'][0]
 
     # Request access token
-    token = oauth.Token(request_token['oauth_token'], request_token['oauth_token_secret'])
+    token = oauth.Token(request_token['oauth_token'], request_token['oauth_token_secret'][0])
     token.set_verifier(oauth_verifier)
     client = oauth.Client(consumer, token)
 
     resp, content = client.request(access_token_url, "POST")
-    output = content.split('&')
-    access_token = dict(urlparse.parse_qsl(content))
+    access_token = urlparse.parse_qs(content)
 
-    tokens = {'consumer_key':consumer_key, 'consumer_secret':consumer_secret,
-                'oauth_token':access_token['oauth_token'],
-                'oauth_token_secret':access_token['oauth_token_secret']}
+    tokens = {
+        'consumer_key': consumer_key,
+        'consumer_secret': consumer_secret,
+        'oauth_token': access_token['oauth_token'][0],
+        'oauth_token_secret': access_token['oauth_token_secret'][0]
+    }
 
     json_file = open(json_path, 'w+')
     json.dump(tokens, json_file, indent=2)
