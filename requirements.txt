@@ -1,9 +1,0 @@
-cov-core==1.7
-coverage==3.6
-distribute==0.6.21
-httplib2==0.8
-httpretty==0.5.13
-nose==1.2.1
-nose-cov==1.6
-oauth2==1.5.211
-wsgiref==0.1.2

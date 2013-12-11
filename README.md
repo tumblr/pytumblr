@@ -98,7 +98,7 @@ Tumblr API clients like the Ruby client.
 The tests (and coverage reports) are run with nose, like this:
 
 ``` bash
-nosetests --with-coverage --cover-package=pytumblr
+python setup.py test
 ```
 
 # Copyright and license
