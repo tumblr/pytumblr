@@ -79,6 +79,20 @@ client.create_text('seejohnrun', tags=['hello', 'world'], ...)
 client.tagged(tag, **params); # get posts with a given tag
 ```
 
+## Using the interactive console
+
+This client comes with a nice interactive console to run you through the OAuth
+process, grab your tokens (and store them for future use).
+
+You'll need `pyyaml` installed to run it, but then it's just:
+
+``` bash
+$ python interactive-console.py
+```
+
+and away you go!  Tokens are stored in `~/.tumblr` and are also shared by other
+Tumblr API clients like the Ruby client.
+
 ## Running tests
 
 The tests (and coverage reports) are run with nose, like this:
