@@ -1,16 +1,16 @@
 #!/usr/bin/python
 
 import pytumblr
-import json
+import yaml
 import os
 import urlparse
 import code
 import oauth2 as oauth
 
-def new_oauth(json_path):
+def new_oauth(yaml_path):
     '''
     Return the consumer and oauth tokens with three-legged OAuth process and
-    save in a json file in the user's home directory.
+    save in a yaml file in the user's home directory.
     '''
 
     print 'Retrieve consumer key and consumer secret from http://www.tumblr.com/oauth/apps'
@@ -52,21 +52,21 @@ def new_oauth(json_path):
         'oauth_token_secret': access_token['oauth_token_secret'][0]
     }
 
-    json_file = open(json_path, 'w+')
-    json.dump(tokens, json_file, indent=2)
-    json_file.close()
+    yaml_file = open(yaml_path, 'w+')
+    yaml.dump(tokens, yaml_file, indent=2)
+    yaml_file.close()
 
     return tokens
 
 if __name__ == '__main__':
-    json_path = os.path.expanduser('~') + '/tumblr_credentials.json'
+    yaml_path = os.path.expanduser('~') + '/.tumblr'
 
-    if not os.path.exists(json_path):
-        tokens = new_oauth(json_path)
+    if not os.path.exists(yaml_path):
+        tokens = new_oauth(yaml_path)
     else:
-        json_file = open(json_path, "r")
-        tokens = json.load(json_file)
-        json_file.close()
+        yaml_file = open(yaml_path, "r")
+        tokens = yaml.safe_load(yaml_file)
+        yaml_file.close()
 
     client = pytumblr.TumblrRestClient(
         tokens['consumer_key'],
