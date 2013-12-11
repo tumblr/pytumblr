@@ -28,9 +28,13 @@ def new_oauth(json_path):
     request_token =  dict(urlparse.parse_qsl(content))
 
     # Redirect to authentication page
-    print 'Please go here and authorize:\n%s?oauth_token=%s' % (authorize_url, request_token['oauth_token'])
+    print '\nPlease go here and authorize:\n%s?oauth_token=%s' % (authorize_url, request_token['oauth_token'])
     redirect_response = raw_input('Allow then paste the full redirect URL here:\n')
-    oauth_verifier = redirect_response.split('&')[-1].lstrip('oauth_verifier=')
+
+    # Retrieve oauth verifier
+    url = urlparse.urlparse(redirect_response)
+    query_dict = urlparse.parse_qs(url.query)
+    oauth_verifier = query_dict['oauth_verifier']
 
     # Request access token
     token = oauth.Token(request_token['oauth_token'], request_token['oauth_token_secret'])
