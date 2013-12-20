@@ -137,6 +137,20 @@ class TumblrRestClientTest(unittest.TestCase):
         assert experimental_body['tags'][0] == 'hello,world'
 
     @httprettified
+    def test_edit_post(self):
+        HTTPretty.register_uri(HTTPretty.POST, 'http://api.tumblr.com/v2/blog/seejohnrun.tumblr.com/post/edit',
+                               body='{"meta": {"status": 200, "msg": "OK"}, "response": []}')
+
+        response = self.client.edit_post('seejohnrun', id='123', state='coolguy', tags=['hello', 'world'])
+        assert response == []
+
+        experimental_body = parse_qs(HTTPretty.last_request.body)
+        assert HTTPretty.last_request.method == 'POST'
+        assert experimental_body['id'][0] == '123'
+        assert experimental_body['state'][0] == 'coolguy'
+        assert experimental_body['tags'][0] == 'hello,world'
+
+    @httprettified
     def test_like(self):
         HTTPretty.register_uri(HTTPretty.POST, 'http://api.tumblr.com/v2/user/like',
                                body='{"meta": {"status": 200, "msg": "OK"}, "response": []}')

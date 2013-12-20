@@ -450,6 +450,11 @@ class TumblrRestClient(object):
         :returns: a dict created from the JSON response
         """
         url = "/v2/blog/%s/post/edit" % blogname
+
+        if 'tags' in kwargs:
+            # Take a list of tags and make them acceptable for upload
+            kwargs['tags'] = ",".join(kwargs['tags'])
+
         return self.send_api_request('post', url, kwargs)
 
     def _send_post(self, blogname, params, valid_options):
