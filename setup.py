@@ -22,7 +22,8 @@ setup(
 
     setup_requires=[
         'nose',
-        'nose-cov'
+        'nose-cov',
+        'mock'
     ]
 
 )
