@@ -229,6 +229,15 @@ class TumblrRestClientTest(unittest.TestCase):
         assert experimental_body['tags'][0] == "omg,nice"
 
     @httprettified
+    def test_no_tags(self):
+        HTTPretty.register_uri(HTTPretty.POST, 'http://api.tumblr.com/v2/blog/seejohnrun.tumblr.com/post',
+                               body='{"meta": {"status": 201, "msg": "OK"}, "response": []}')
+
+        response = self.client.create_link('seejohnrun.tumblr.com', tags=[])
+        experimental_body = parse_qs(HTTPretty.last_request.body)
+        assert 'tags' not in experimental_body
+
+    @httprettified
     def test_create_quote(self):
         HTTPretty.register_uri(HTTPretty.POST, 'http://api.tumblr.com/v2/blog/codingjester.tumblr.com/post',
                                body='{"meta": {"status": 201, "msg": "OK"}, "response": []}')
