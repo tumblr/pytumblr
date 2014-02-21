@@ -496,9 +496,12 @@ class TumblrRestClient(object):
         files = []
         if 'data' in params:
             if isinstance(params['data'], list):
-                files = [('data['+str(idx)+']', data, open(data, 'rb').read()) for idx, data in enumerate(params['data'])]
+                for idx, data in enumerate(params['data']):
+                    with open(data, 'rb') as f:
+                        files.append(('data['+str(idx)+']', data, f.read()))
             else:
-                files = [('data', params['data'], open(params['data'], 'rb').read())]
+                with open(params['data'], 'rb') as f:
+                    files = [('data', params['data'], f.read())]
             del params['data']
 
         validate_params(valid_parameters, params)
