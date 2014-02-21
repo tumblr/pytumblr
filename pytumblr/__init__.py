@@ -411,6 +411,7 @@ class TumblrRestClient(object):
         :param blogname: a string, the url of the blog you want to reblog to
         :param id: an int, the post id that you are reblogging
         :param reblog_key: a string, the reblog key of the post
+        :param comment: a string, a comment added to the reblogged post
 
         :returns: a dict created from the JSON response
         """
