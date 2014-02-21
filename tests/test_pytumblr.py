@@ -13,7 +13,8 @@ class TumblrRestClientTest(unittest.TestCase):
     """
 
     def setUp(self):
-        credentials = json.loads(open('tests/tumblr_credentials.json', 'r').read())
+        with open('tests/tumblr_credentials.json', 'r') as f:
+            credentials = json.loads(f.read())
         self.client = pytumblr.TumblrRestClient(credentials['consumer_key'], credentials['consumer_secret'], credentials['oauth_token'], credentials['oauth_token_secret'])
 
     @httprettified
