@@ -14,9 +14,6 @@ def validate_params(valid_options, params):
     if not params:
         return
 
-    if not valid_options:
-        return
-
     #We only allow one version of the data parameter to be passed
     data_filter = ['data', 'source', 'external_url', 'embed']
     multiple_data = filter(lambda x: x in data_filter, params.keys())
