@@ -278,7 +278,7 @@ class TumblrRestClient(object):
         :returns: a dict created from the JSON response
         """
         kwargs.update({"type": "photo"})
-        return self._send_post(blogname, kwargs, ['caption', 'link', 'source', 'type', 'data'])
+        return self._send_post(blogname, kwargs)
     
     @validate_blogname
     def create_text(self, blogname, **kwargs):
@@ -298,7 +298,7 @@ class TumblrRestClient(object):
         :returns: a dict created from the JSON response
         """
         kwargs.update({"type": "text"})
-        return self._send_post(blogname, kwargs, ['text', 'title', 'body'])
+        return self._send_post(blogname, kwargs)
 
     @validate_blogname
     def create_quote(self, blogname, **kwargs):
@@ -318,7 +318,7 @@ class TumblrRestClient(object):
         :returns: a dict created from the JSON response
         """
         kwargs.update({"type": "quote"})
-        return self._send_post(blogname, kwargs, ['quote', 'source'])
+        return self._send_post(blogname, kwargs)
 
     @validate_blogname
     def create_link(self, blogname, **kwargs):
@@ -339,7 +339,7 @@ class TumblrRestClient(object):
         :returns: a dict created from the JSON response
         """
         kwargs.update({"type": "link"})
-        return self._send_post(blogname, kwargs, ['title', 'url', 'description'])
+        return self._send_post(blogname, kwargs)
 
     @validate_blogname
     def create_chat(self, blogname, **kwargs):
@@ -359,7 +359,7 @@ class TumblrRestClient(object):
         :returns: a dict created from the JSON response
         """
         kwargs.update({"type": "chat"})
-        return self._send_post(blogname, kwargs, ['title', 'conversation'])
+        return self._send_post(blogname, kwargs)
 
     @validate_blogname
     def create_audio(self, blogname, **kwargs):
@@ -380,7 +380,7 @@ class TumblrRestClient(object):
         :returns: a dict created from the JSON response
         """
         kwargs.update({"type": "audio"})
-        return self._send_post(blogname, kwargs, ['caption', 'external_url', 'data'])
+        return self._send_post(blogname, kwargs)
 
     @validate_blogname
     def create_video(self, blogname, **kwargs):
@@ -401,7 +401,7 @@ class TumblrRestClient(object):
         :returns: a dict created from the JSON response
         """
         kwargs.update({"type": "video"})
-        return self._send_post(blogname, kwargs, ['caption', 'embed', 'data'])
+        return self._send_post(blogname, kwargs)
 
     @validate_blogname
     def reblog(self, blogname, **kwargs):
@@ -411,12 +411,13 @@ class TumblrRestClient(object):
         :param blogname: a string, the url of the blog you want to reblog to
         :param id: an int, the post id that you are reblogging
         :param reblog_key: a string, the reblog key of the post
+        :param comment: a string, a comment added to the reblogged post
 
         :returns: a dict created from the JSON response
         """
         url = "/v2/blog/%s/post/reblog" % blogname
 
-        valid_options = ['id', 'reblog_key', 'comment', 'type', 'state', 'tags', 'tweet', 'date', 'format', 'slug']
+        valid_options = ['id', 'reblog_key', 'comment'] + self._post_valid_options(kwargs.get('type', None))
         if 'tags' in kwargs and kwargs['tags']:
             # Take a list of tags and make them acceptable for upload
             kwargs['tags'] = ",".join(kwargs['tags'])
@@ -441,11 +442,13 @@ class TumblrRestClient(object):
         Edits a post with a given id
 
         :param blogname: a string, the url of the blog you want to edit
+        :param state: a string, the state of the post. published, draft, queue, or private.
         :param tags: a list of tags that you want applied to the post
         :param tweet: a string, the customized tweet that you want
         :param date: a string, the GMT date and time of the post
         :param format: a string, sets the format type of the post. html or markdown
         :param slug: a string, a short text summary to the end of the post url
+        :param id: an int, the post id that you want to edit
 
         :returns: a dict created from the JSON response
         """
@@ -455,12 +458,36 @@ class TumblrRestClient(object):
             # Take a list of tags and make them acceptable for upload
             kwargs['tags'] = ",".join(kwargs['tags'])
 
-        return self.send_api_request('post', url, kwargs)
+        valid_options = ['id'] + self._post_valid_options(kwargs.get('type', None))
+        return self.send_api_request('post', url, kwargs, valid_options)
 
-    def _send_post(self, blogname, params, valid_options):
+    # Parameters valid for /post, /post/edit, and /post/reblog.
+    def _post_valid_options(self, post_type=None):
+        # These options are always valid
+        valid = ['type', 'state', 'tags', 'tweet', 'date', 'format', 'slug']
+
+        # Other options are valid on a per-post-type basis
+        if post_type == 'text':
+            valid += ['title', 'body']
+        elif post_type == 'photo':
+            valid += ['caption', 'link', 'source', 'data']
+        elif post_type == 'quote':
+            valid += ['quote', 'source']
+        elif post_type == 'link':
+            valid += ['title', 'url', 'description']
+        elif post_type == 'chat':
+            valid += ['title', 'conversation']
+        elif post_type == 'audio':
+            valid += ['caption', 'external_url', 'data']
+        elif post_type == 'video':
+            valid += ['caption', 'embed', 'data']
+
+        return valid
+
+    def _send_post(self, blogname, params):
         """
-        Formats parameters and sends the API request off. Validates common parameters
-        and formats your tags for you.
+        Formats parameters and sends the API request off. Validates
+        common and per-post-type parameters and formats your tags for you.
 
         :param blogname: a string, the blogname of the blog you are posting to
         :param params: a dict, the key-value of the parameters for the api request
@@ -469,7 +496,7 @@ class TumblrRestClient(object):
         :returns: a dict parsed from the JSON response
         """
         url = "/v2/blog/%s/post" % blogname
-        valid_options = ['type', 'state', 'tags', 'tweet', 'date', 'format', 'slug'] + valid_options
+        valid_options = self._post_valid_options(params.get('type', None))
 
         if 'tags' in params:
             # Take a list of tags and make them acceptable for upload
@@ -496,9 +523,12 @@ class TumblrRestClient(object):
         files = []
         if 'data' in params:
             if isinstance(params['data'], list):
-                files = [('data['+str(idx)+']', data, open(data, 'rb').read()) for idx, data in enumerate(params['data'])]
+                for idx, data in enumerate(params['data']):
+                    with open(data, 'rb') as f:
+                        files.append(('data['+str(idx)+']', data, f.read()))
             else:
-                files = [('data', params['data'], open(params['data'], 'rb').read())]
+                with open(params['data'], 'rb') as f:
+                    files = [('data', params['data'], f.read())]
             del params['data']
 
         validate_params(valid_parameters, params)
