@@ -470,7 +470,7 @@ class TumblrRestClient(object):
         if post_type == 'text':
             valid += ['title', 'body']
         elif post_type == 'photo':
-            valid += ['caption', 'link', 'source', 'data']
+            valid += ['caption', 'link', 'source', 'data', 'photoset_layout']
         elif post_type == 'quote':
             valid += ['quote', 'source']
         elif post_type == 'link':
