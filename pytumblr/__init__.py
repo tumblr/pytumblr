@@ -498,7 +498,7 @@ class TumblrRestClient(object):
         url = "/v2/blog/%s/post" % blogname
         valid_options = self._post_valid_options(params.get('type', None))
 
-        if 'tags' in params:
+        if len(params.get("tags", [])) > 0:
             # Take a list of tags and make them acceptable for upload
             params['tags'] = ",".join(params['tags'])
 
