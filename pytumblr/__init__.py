@@ -397,6 +397,7 @@ class TumblrRestClient(object):
         :param caption: a string, the caption for the post
         :param embed: a string, the emebed code that you'd like to upload
         :param data: a string, the local filename path of the video you are uploading
+        :param files: an array of preread video files to upload
 
         :returns: a dict created from the JSON response
         """
@@ -480,7 +481,7 @@ class TumblrRestClient(object):
         elif post_type == 'audio':
             valid += ['caption', 'external_url', 'data']
         elif post_type == 'video':
-            valid += ['caption', 'embed', 'data']
+            valid += ['caption', 'embed', 'data', 'files']
 
         return valid
 
@@ -520,7 +521,11 @@ class TumblrRestClient(object):
             params.update({'api_key': self.request.consumer.key})
             valid_parameters.append('api_key')
 
-        files = []
+        # Allow files to be preread if small enough
+        if 'files' in params:
+            files = params['files']
+        else:
+            files = []
         if 'data' in params:
             if isinstance(params['data'], list):
                 for idx, data in enumerate(params['data']):
