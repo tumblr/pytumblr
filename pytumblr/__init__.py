@@ -397,7 +397,7 @@ class TumblrRestClient(object):
         :param caption: a string, the caption for the post
         :param embed: a string, the emebed code that you'd like to upload
         :param data: a string, the local filename path of the video you are uploading
-        :param files: an array of preread video files to upload
+        :param files: an array of videos to upload as if from file [('data', 'filename.ext', <file contents>)]
 
         :returns: a dict created from the JSON response
         """
