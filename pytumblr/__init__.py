@@ -524,6 +524,7 @@ class TumblrRestClient(object):
         # Allow files to be preread if small enough
         if 'files' in params:
             files = params['files']
+            del params['files']
         else:
             files = []
         if 'data' in params:
