@@ -62,7 +62,7 @@ these types there are a few defaults that are able to be used with any post type
 The default supported types are described below.
 
 * **state**  - a string, the state of the post. Supported types are _published_, _draft_, _queue_, _private_
-* **tags**   - a list, a list of strings that.
+* **tags**   - a list, a list of strings that you want tagged on the post. eg: ["testing", "magic", "1"]
 * **tweet**  - a string, the string of the customized tweet you want. eg: "Man I love my mega awesome post!"
 * **date**   -  a string, the customized GMT that you want
 * **format** - a string, the format that your post is in. Support types are _html_ or _markdown_
