@@ -20,7 +20,7 @@ setup(
         'httpretty'
     ],
 
-    setup_requires=[
+    tests_require=[
         'nose',
         'nose-cov',
         'mock'
