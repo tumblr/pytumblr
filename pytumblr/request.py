@@ -122,20 +122,20 @@ class TumblrRequest(object):
         L = []
         for (key, value) in fields.items():
             L.append('--' + BOUNDARY)
-            L.append('Content-Disposition: form-data; name="%s"' % key)
+            L.append('Content-Disposition: form-data; name="{}"'.format(key))
             L.append('')
             L.append(value)
         for (key, filename, value) in files:
             L.append('--' + BOUNDARY)
-            L.append('Content-Disposition: form-data; name="%s"; filename="%s"' % (key, filename))
-            L.append('Content-Type: %s' % mimetypes.guess_type(filename)[0] or 'application/octet-stream')
+            L.append('Content-Disposition: form-data; name="{}"; filename="{}"'.format(key, filename))
+            L.append('Content-Type: {}'.format(mimetypes.guess_type(filename)[0] or 'application/octet-stream'))
             L.append('Content-Transfer-Encoding: binary')
             L.append('')
             L.append(value)
         L.append('--' + BOUNDARY + '--')
         L.append('')
         body = CRLF.join(L)
-        content_type = 'multipart/form-data; boundary=%s' % BOUNDARY
+        content_type = 'multipart/form-data; boundary={}'.format(BOUNDARY)
         return content_type, body
 
     def generate_oauth_params(self):
