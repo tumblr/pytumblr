@@ -24,7 +24,7 @@ def validate_params(valid_options, params):
     disallowed_fields = [key for key in params.keys() if key not in valid_options]
     if disallowed_fields:
         field_strings = ",".join(disallowed_fields)
-        raise Exception("{} are not allowed fields".format(field_strings))
+        raise Exception("{0} are not allowed fields".format(field_strings))
 
 def validate_blogname(fn):
     """
