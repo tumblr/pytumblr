@@ -18,15 +18,15 @@ def validate_params(valid_options, params):
 
     #We only allow one version of the data parameter to be passed
     data_filter = ['data', 'source', 'external_url', 'embed']
-    multiple_data = filter(lambda x: x in data_filter, params.keys())
+    multiple_data = [key for key in params.keys() if key in data_filter]
     if len(multiple_data) > 1:
         raise Exception("You can't mix and match data parameters")
 
     #No bad fields which are not in valid options can pass
-    disallowed_fields = filter(lambda x: x not in valid_options, params.keys())
+    disallowed_fields = [key for key in params.keys() if key not in valid_options]
     if disallowed_fields:
         field_strings = ",".join(disallowed_fields)
-        raise Exception("%s are not allowed fields" % field_strings)
+        raise Exception("{0} are not allowed fields".format(field_strings))
 
 def validate_blogname(fn):
     """
