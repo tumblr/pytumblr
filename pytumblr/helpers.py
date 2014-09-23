@@ -1,3 +1,5 @@
+from functools import wraps
+
 def validate_params(valid_options, params):
     """
     Helps us validate the parameters for the request
@@ -37,6 +39,7 @@ def validate_blogname(fn):
 
     and query all the same blog.
     """
+    @wraps(fn)
     def add_dot_tumblr(*args, **kwargs):
         if (len(args) > 1 and ("." not in args[1])):
             args = list(args)
