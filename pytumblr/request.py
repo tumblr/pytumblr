@@ -1,8 +1,6 @@
 import sys
 import time
 import json
-import time
-import json
 import oauth2 as oauth
 from httplib2 import RedirectLimit
 
