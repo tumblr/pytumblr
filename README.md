@@ -2,6 +2,9 @@
 
 [![Build Status](https://travis-ci.org/tumblr/pytumblr.png?branch=master)](https://travis-ci.org/tumblr/pytumblr)
 
+Support Python2 and Python3!
+
+
 ## Create a client
 
 A `pytumblr.TumblrRestClient` is the object you'll make all of your calls to the
