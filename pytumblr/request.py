@@ -3,6 +3,9 @@ import time
 import json
 import oauth2 as oauth
 from httplib2 import RedirectLimit
+import email.generator
+import mimetypes
+import io
 
 # organized imports for support to Python3
 __py3__ = sys.version_info >= (3, 0)
@@ -104,17 +107,24 @@ class TumblrRequest(object):
 
         :returns: a dict parsed from the JSON response
         """
-        #combine the parameters with the generated oauth params
-        params = dict(params.items() + self.generate_oauth_params().items())
-        faux_req = oauth.Request(method="POST", url=url, parameters=params)
+        # combine the parameters with the generated oauth params
+        # support to py2k and py3k:
+        dparams = params.copy()
+        dparams.update(self.generate_oauth_params())
+        faux_req = oauth.Request(method="POST", url=url, parameters=dparams)
         faux_req.sign_request(oauth.SignatureMethod_HMAC_SHA1(), self.consumer, self.token)
-        params = dict(parse_qsl(faux_req.to_postdata()))
+        dparams = dict(parse_qsl(faux_req.to_postdata()))
 
-        content_type, body = self.encode_multipart_formdata(params, files)
+        content_type, body = self.encode_multipart_formdata(dparams, files)
         headers = {'Content-Type': content_type, 'Content-Length': str(len(body))}
 
-        #Do a bytearray of the body and everything seems ok
-        r = urllib2.Request(url, bytearray(body), headers)
+        # Do a bytearray of the body and everything seems ok
+        # coding = latin1 for py3k
+        if __py3__:    
+            r = urllib2.Request(url, bytearray(body, "latin1"), headers)
+        else:
+            r = urllib2.Request(url, bytearray(body), headers)
+
         content = urllib2.urlopen(r).read()
         return self.json_parse(content)
 
@@ -127,11 +137,11 @@ class TumblrRequest(object):
 
         :returns: the content for the body and the content-type value
         """
-        import mimetools
-        import mimetypes
-        BOUNDARY = mimetools.choose_boundary()
+        # py3k and py2k
+        BOUNDARY = email.generator._make_boundary()
         CRLF = '\r\n'
         L = []
+
         for (key, value) in fields.items():
             L.append('--' + BOUNDARY)
             L.append('Content-Disposition: form-data; name="{0}"'.format(key))
@@ -146,7 +156,15 @@ class TumblrRequest(object):
             L.append(value)
         L.append('--' + BOUNDARY + '--')
         L.append('')
-        body = CRLF.join(L)
+
+        # py3k
+        if __py3__:
+            L = [elem.decode('latin1') if isinstance(elem, bytes) else elem for elem in L]
+            body = str.join(CRLF, L)
+        # py2k
+        else:
+            body = CRLF.join(L)
+
         content_type = 'multipart/form-data; boundary={0}'.format(BOUNDARY)
         return content_type, body
 
