@@ -1,11 +1,25 @@
-import urllib
-import urllib2
+import sys
 import time
 import json
-
-from urlparse import parse_qsl
+import time
+import json
 import oauth2 as oauth
 from httplib2 import RedirectLimit
+
+# organized imports for support to Python3
+__py3__ = sys.version_info >= (3, 0)
+
+# python3
+try:
+    from urllib.parse import urlencode
+    from urllib.parse import parse_qsl
+    import urllib.request as urllib2
+# python2
+except:
+    from urllib import urlencode
+    from urlparse import parse_qsl
+    import urllib2
+
 
 class TumblrRequest(object):
     """
@@ -28,13 +42,13 @@ class TumblrRequest(object):
         """
         url = self.host + url
         if params:
-            url = url + "?" + urllib.urlencode(params)
+            url = url + "?" + urlencode(params)
 
         client = oauth.Client(self.consumer, self.token)
         try:
             client.follow_redirects = False
             resp, content = client.request(url, method="GET", redirections=False)
-        except RedirectLimit, e:
+        except RedirectLimit as e:
             resp, content = e.args
 
         return self.json_parse(content)
@@ -56,9 +70,9 @@ class TumblrRequest(object):
                 return self.post_multipart(url, params, files)
             else:
                 client = oauth.Client(self.consumer, self.token)
-                resp, content = client.request(url, method="POST", body=urllib.urlencode(params))
+                resp, content = client.request(url, method="POST", body=urlencode(params))
                 return self.json_parse(content)
-        except urllib2.HTTPError, e:
+        except urllib2.HTTPError as e:
             return self.json_parse(e.read())
 
     def json_parse(self, content):
@@ -71,8 +85,8 @@ class TumblrRequest(object):
         :returns: a dict of the json response
         """
         try:
-            data = json.loads(content)
-        except ValueError, e:
+            data = json.loads(content.decode())
+        except ValueError as e:
             data = {'meta': { 'status': 500, 'msg': 'Server Error'}, 'response': {"error": "Malformed JSON or HTML was returned."}}
         
         #We only really care about the response if we succeed
