@@ -354,7 +354,7 @@ class TumblrRestClient(object):
         :param format: a string, sets the format type of the post. html or markdown
         :param slug: a string, a short text summary to the end of the post url
         :param title: a string, the title of the conversation
-        :param converstaion: a string, the conversation you are posting
+        :param conversation: a string, the conversation you are posting
 
         :returns: a dict created from the JSON response
         """
