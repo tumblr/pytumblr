@@ -168,7 +168,7 @@ class TumblrRestClient(object):
         :returns: A dict created from the JSON response
         """
         url = "/v2/blog/{0}/likes".format(blogname)
-        return self.send_api_request("get", url, kwargs, ['limit', 'offset'], True)
+        return self.send_api_request("get", url, kwargs, ['limit', 'offset', 'before', 'after'], True)
     
     @validate_blogname
     def queue(self, blogname, **kwargs):
