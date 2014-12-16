@@ -210,6 +210,22 @@ class TumblrRestClientTest(unittest.TestCase):
         assert response == []
 
     @httprettified
+    def test_likes_with_after(self):
+        HTTPretty.register_uri(HTTPretty.GET, 'https://api.tumblr.com/v2/user/likes',
+                               body='{"meta": {"status": 200, "msg": "OK"}, "response": []}')
+
+        response = self.client.likes(after=1418684291)
+        assert response == []
+
+    @httprettified
+    def test_likes_with_before(self):
+        HTTPretty.register_uri(HTTPretty.GET, 'https://api.tumblr.com/v2/user/likes',
+                               body='{"meta": {"status": 200, "msg": "OK"}, "response": []}')
+
+        response = self.client.likes(before=1418684291)
+        assert response == []
+
+    @httprettified
     def test_following(self):
         HTTPretty.register_uri(HTTPretty.GET, 'https://api.tumblr.com/v2/user/following',
                                body='{"meta": {"status": 200, "msg": "OK"}, "response": []}')
