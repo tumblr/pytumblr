@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import nose
 import unittest
 import mock
@@ -48,6 +50,14 @@ class TumblrRestClientTest(unittest.TestCase):
 
         args = { 'limit': 1 }
         response = self.client.posts('seejohnrun', 'photo', **args)
+        assert response['posts'] == []
+
+    @httprettified
+    def test_posts_with_unicode_arg(self):
+        HTTPretty.register_uri(HTTPretty.GET, 'https://api.tumblr.com/v2/blog/seejohnrun.tumblr.com/posts?tag=voil%C3%A0',
+                               body='{"meta": {"status": 200, "msg": "OK"}, "response": {"posts": [] } }')
+        args = { 'tag': u'voilà' }
+        response = self.client.posts('seejohnrun', **args)
         assert response['posts'] == []
 
     @httprettified
@@ -143,7 +153,7 @@ class TumblrRestClientTest(unittest.TestCase):
         HTTPretty.register_uri(HTTPretty.POST, 'https://api.tumblr.com/v2/blog/seejohnrun.tumblr.com/post/reblog',
                                body='{"meta": {"status": 200, "msg": "OK"}, "response": []}')
 
-        response = self.client.reblog('seejohnrun', id='123', reblog_key="adsfsadf", state='coolguy', tags=['hello', 'world'])
+        response = self.client.reblog('seejohnrun', id='123', reblog_key="adsfsadf", state='coolguy', tags=['hello', 'world', u'voilà'])
         assert response == []
 
         experimental_body = parse_qs(HTTPretty.last_request.body)
@@ -151,21 +161,21 @@ class TumblrRestClientTest(unittest.TestCase):
         assert experimental_body['id'][0] == '123'
         assert experimental_body['reblog_key'][0] == 'adsfsadf'
         assert experimental_body['state'][0] == 'coolguy'
-        assert experimental_body['tags'][0] == 'hello,world'
+        assert experimental_body['tags'][0] == u'hello,world,voilà'.encode('utf-8')
 
     @httprettified
     def test_edit_post(self):
         HTTPretty.register_uri(HTTPretty.POST, 'https://api.tumblr.com/v2/blog/seejohnrun.tumblr.com/post/edit',
                                body='{"meta": {"status": 200, "msg": "OK"}, "response": []}')
 
-        response = self.client.edit_post('seejohnrun', id='123', state='coolguy', tags=['hello', 'world'])
+        response = self.client.edit_post('seejohnrun', id='123', state='coolguy', tags=['hello', 'world', u'voilà'])
         assert response == []
 
         experimental_body = parse_qs(HTTPretty.last_request.body)
         assert HTTPretty.last_request.method == 'POST'
         assert experimental_body['id'][0] == '123'
         assert experimental_body['state'][0] == 'coolguy'
-        assert experimental_body['tags'][0] == 'hello,world'
+        assert experimental_body['tags'][0] == u'hello,world,voilà'.encode('utf-8')
 
     @httprettified
     def test_like(self):
@@ -242,11 +252,19 @@ class TumblrRestClientTest(unittest.TestCase):
         assert response == []
 
     @httprettified
+    def test_tagged_unicode(self):
+        HTTPretty.register_uri(HTTPretty.GET, 'https://api.tumblr.com/v2/tagged?tag=voil%C3%A0',
+                               body='{"meta": {"status": 200, "msg": "OK"}, "response": []}')
+
+        response = self.client.tagged(u'voilà')
+        assert response == []
+
+    @httprettified
     def test_create_text(self):
         HTTPretty.register_uri(HTTPretty.POST, 'https://api.tumblr.com/v2/blog/codingjester.tumblr.com/post',
                                body='{"meta": {"status": 201, "msg": "OK"}, "response": []}')
 
-        response = self.client.create_text('codingjester.tumblr.com', body="Testing")
+        response = self.client.create_text('codingjester.tumblr.com', body=u"Testing äöü")
         assert response == []
 
     @httprettified
@@ -254,12 +272,12 @@ class TumblrRestClientTest(unittest.TestCase):
         HTTPretty.register_uri(HTTPretty.POST, 'https://api.tumblr.com/v2/blog/codingjester.tumblr.com/post',
                                body='{"meta": {"status": 201, "msg": "OK"}, "response": []}')
 
-        response = self.client.create_link('codingjester.tumblr.com', url="https://google.com", tags=['omg', 'nice'])
+        response = self.client.create_link('codingjester.tumblr.com', url="https://google.com", tags=['omg', 'nice', u'voilà'])
         assert response == []
 
         experimental_body = parse_qs(HTTPretty.last_request.body)
         assert HTTPretty.last_request.method == "POST"
-        assert experimental_body['tags'][0] == "omg,nice"
+        assert experimental_body['tags'][0] == u"omg,nice,voilà".encode('utf-8')
 
     @httprettified
     def test_no_tags(self):
@@ -275,7 +293,7 @@ class TumblrRestClientTest(unittest.TestCase):
         HTTPretty.register_uri(HTTPretty.POST, 'https://api.tumblr.com/v2/blog/codingjester.tumblr.com/post',
                                body='{"meta": {"status": 201, "msg": "OK"}, "response": []}')
 
-        response = self.client.create_quote('codingjester.tumblr.com', quote="It's better to love and lost, than never have loved at all.")
+        response = self.client.create_quote('codingjester.tumblr.com', quote=u"It's better to love and lost, than never have loved at all. ♥")
         assert response == []
 
     @httprettified
@@ -283,28 +301,42 @@ class TumblrRestClientTest(unittest.TestCase):
         HTTPretty.register_uri(HTTPretty.POST, 'https://api.tumblr.com/v2/blog/codingjester.tumblr.com/post',
                                body='{"meta": {"status": 201, "msg": "OK"}, "response": []}')
 
-        response = self.client.create_chat('codingjester.tumblr.com', conversation="JB: Testing is rad.\nJC: Hell yeah.")
+        response = self.client.create_chat('codingjester.tumblr.com', conversation=u"JB: Testing is rad.\nJC: Hell yeah. ♥")
         assert response == []
 
     @httprettified
-    def test_create_photo(self):
+    def test_create_photo_from_url(self):
         HTTPretty.register_uri(HTTPretty.POST, 'https://api.tumblr.com/v2/blog/codingjester.tumblr.com/post',
                                body='{"meta": {"status": 201, "msg": "OK"}, "response": []}')
 
         response = self.client.create_photo('codingjester.tumblr.com', source="https://media.tumblr.com/image.jpg")
         assert response == []
 
-        #with mock.patch('__builtin__.open') as my_mock:
-        #    my_mock.return_value.__enter__ = lambda s: s
-        #    my_mock.return_value.__exit__ = mock.Mock()
-        #    my_mock.return_value.read.return_value = 'some data'
-        #    response = self.client.create_photo('codingjester.tumblr.com', data="/Users/johnb/Desktop/gozer_avatar.jpgdf")
-        #    assert response['meta']['status'] == 201
-        #    assert response['meta']['msg'] == "OK"
 
-        #response = self.client.create_photo('codingjester.tumblr.com', data=["/Users/johnb/Desktop/gozer_avatar.jpg", "/Users/johnb/Desktop/gozer_avatar.jpg"])
-        #assert response['meta']['status'] == 201
-        #assert response['meta']['msg'] == "OK"
+    # For some reason, mocking open causes mimetypes.guess_type to
+    # hang. Mocking guess_type isn't ideal since we're overriding part
+    # of what we're testing. Find better solution?
+    @httprettified
+    @mock.patch('mimetypes.guess_type')
+    def test_create_photo_from_file(self, mockguess):
+        HTTPretty.register_uri(HTTPretty.POST, 'https://api.tumblr.com/v2/blog/codingjester.tumblr.com/post',
+                               body='{"meta": {"status": 201, "msg": "OK"}, "response": []}')
+        mockopen = mock.mock_open(read_data='some data')
+        mockguess.return_value = 'jpg'
+        with mock.patch('__builtin__.open', mockopen, create=True):
+            response = self.client.create_photo('codingjester.tumblr.com', data="/Users/johnb/Desktop/gozer_avatar.jpg")
+        assert response == []
+
+    @httprettified
+    @mock.patch('mimetypes.guess_type')
+    def test_create_photo_from_file_with_unicode(self, mockguess):
+        HTTPretty.register_uri(HTTPretty.POST, 'https://api.tumblr.com/v2/blog/codingjester.tumblr.com/post',
+                               body='{"meta": {"status": 201, "msg": "OK"}, "response": []}')
+        mockopen = mock.mock_open(read_data='some data')
+        mockguess.return_value = 'jpg'
+        with mock.patch('__builtin__.open'.format(__name__), mockopen, create=True):
+           response = self.client.create_photo('codingjester.tumblr.com', data=u"/Users/johnb/Desktop/gözer_avatar.jpg")
+        assert response == []
 
     @httprettified
     def test_create_audio(self):
