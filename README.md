@@ -182,7 +182,7 @@ client.reblog("codingjester", 125356, "reblog_key")
 #### Deleting a post
 Deleting just requires that you own the post and have the post id
 ```python
-client.delete("codingjester", 123456) # Deletes your post :(
+client.delete_post("codingjester", 123456) # Deletes your post :(
 ```
 
 A note on tags: When passing tags, as params, please pass them as a list (not

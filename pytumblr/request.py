@@ -12,10 +12,15 @@ class TumblrRequest(object):
     A simple request object that lets us query the Tumblr API
     """
 
-    def __init__(self, consumer_key, consumer_secret="", oauth_token="", oauth_secret="", host="http://api.tumblr.com"):
+    __version = "0.0.7";
+
+    def __init__(self, consumer_key, consumer_secret="", oauth_token="", oauth_secret="", host="https://api.tumblr.com"):
         self.host = host
         self.consumer = oauth.Consumer(key=consumer_key, secret=consumer_secret)
         self.token = oauth.Token(key=oauth_token, secret=oauth_secret)
+        self.headers = {
+            "User-Agent" : "pytumblr/" + self.__version
+        }
 
     def get(self, url, params):
         """
@@ -33,7 +38,7 @@ class TumblrRequest(object):
         client = oauth.Client(self.consumer, self.token)
         try:
             client.follow_redirects = False
-            resp, content = client.request(url, method="GET", redirections=False)
+            resp, content = client.request(url, method="GET", redirections=False, headers=self.headers)
         except RedirectLimit, e:
             resp, content = e.args
 
@@ -56,7 +61,7 @@ class TumblrRequest(object):
                 return self.post_multipart(url, params, files)
             else:
                 client = oauth.Client(self.consumer, self.token)
-                resp, content = client.request(url, method="POST", body=urllib.urlencode(params))
+                resp, content = client.request(url, method="POST", body=urllib.urlencode(params), headers=self.headers)
                 return self.json_parse(content)
         except urllib2.HTTPError, e:
             return self.json_parse(e.read())
@@ -122,20 +127,20 @@ class TumblrRequest(object):
         L = []
         for (key, value) in fields.items():
             L.append('--' + BOUNDARY)
-            L.append('Content-Disposition: form-data; name="%s"' % key)
+            L.append('Content-Disposition: form-data; name="{0}"'.format(key))
             L.append('')
             L.append(value)
         for (key, filename, value) in files:
             L.append('--' + BOUNDARY)
-            L.append('Content-Disposition: form-data; name="%s"; filename="%s"' % (key, filename))
-            L.append('Content-Type: %s' % mimetypes.guess_type(filename)[0] or 'application/octet-stream')
+            L.append('Content-Disposition: form-data; name="{0}"; filename="{1}"'.format(key, filename))
+            L.append('Content-Type: {0}'.format(mimetypes.guess_type(filename)[0] or 'application/octet-stream'))
             L.append('Content-Transfer-Encoding: binary')
             L.append('')
             L.append(value)
         L.append('--' + BOUNDARY + '--')
         L.append('')
         body = CRLF.join(L)
-        content_type = 'multipart/form-data; boundary=%s' % BOUNDARY
+        content_type = 'multipart/form-data; boundary={0}'.format(BOUNDARY)
         return content_type, body
 
     def generate_oauth_params(self):
