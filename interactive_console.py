@@ -1,11 +1,15 @@
 #!/usr/bin/python
+from __future__ import print_function
+from future import standard_library
+standard_library.install_aliases()
+from builtins import input
 
 import pytumblr
 import yaml
 import os
-import urlparse
 import code
-import oauth2 as oauth
+from requests_oauthlib import OAuth1Session
+
 
 def new_oauth(yaml_path):
     '''
@@ -13,43 +17,47 @@ def new_oauth(yaml_path):
     save in a yaml file in the user's home directory.
     '''
 
-    print 'Retrieve consumer key and consumer secret from http://www.tumblr.com/oauth/apps'
-    consumer_key = raw_input('Paste the consumer key here: ')
-    consumer_secret = raw_input('Paste the consumer secret here: ')
+    print('Retrieve consumer key and consumer secret from http://www.tumblr.com/oauth/apps')
+    consumer_key = input('Paste the consumer key here: ')
+    consumer_secret = input('Paste the consumer secret here: ')
 
     request_token_url = 'http://www.tumblr.com/oauth/request_token'
     authorize_url = 'http://www.tumblr.com/oauth/authorize'
     access_token_url = 'http://www.tumblr.com/oauth/access_token'
 
-    consumer = oauth.Consumer(consumer_key, consumer_secret)
-    client = oauth.Client(consumer)
+    # STEP 1: Obtain request token
+    oauth_session = OAuth1Session(consumer_key, client_secret=consumer_secret)
+    fetch_response = oauth_session.fetch_request_token(request_token_url)
+    resource_owner_key = fetch_response.get('oauth_token')
+    resource_owner_secret = fetch_response.get('oauth_token_secret')
 
-    # Get request token
-    resp, content = client.request(request_token_url, "POST")
-    request_token =  urlparse.parse_qs(content)
+    # STEP 2: Authorize URL + Rresponse
+    full_authorize_url = oauth_session.authorization_url(authorize_url)
 
     # Redirect to authentication page
-    print '\nPlease go here and authorize:\n%s?oauth_token=%s' % (authorize_url, request_token['oauth_token'][0])
-    redirect_response = raw_input('Allow then paste the full redirect URL here:\n')
+    print('\nPlease go here and authorize:\n{}'.format(full_authorize_url))
+    redirect_response = input('Allow then paste the full redirect URL here:\n')
 
     # Retrieve oauth verifier
-    url = urlparse.urlparse(redirect_response)
-    query_dict = urlparse.parse_qs(url.query)
-    oauth_verifier = query_dict['oauth_verifier'][0]
+    oauth_response = oauth_session.parse_authorization_response(redirect_response)
 
-    # Request access token
-    token = oauth.Token(request_token['oauth_token'], request_token['oauth_token_secret'][0])
-    token.set_verifier(oauth_verifier)
-    client = oauth.Client(consumer, token)
+    verifier = oauth_response.get('oauth_verifier')
 
-    resp, content = client.request(access_token_url, "POST")
-    access_token = urlparse.parse_qs(content)
+    # STEP 3: Request final access token
+    oauth_session = OAuth1Session(
+        consumer_key,
+        client_secret=consumer_secret,
+        resource_owner_key=resource_owner_key,
+        resource_owner_secret=resource_owner_secret,
+        verifier=verifier
+    )
+    oauth_tokens = oauth_session.fetch_access_token(access_token_url)
 
     tokens = {
         'consumer_key': consumer_key,
         'consumer_secret': consumer_secret,
-        'oauth_token': access_token['oauth_token'][0],
-        'oauth_token_secret': access_token['oauth_token_secret'][0]
+        'oauth_token': oauth_tokens.get('oauth_token'),
+        'oauth_token_secret': oauth_tokens.get('oauth_token_secret')
     }
 
     yaml_file = open(yaml_path, 'w+')
@@ -75,6 +83,6 @@ if __name__ == '__main__':
         tokens['oauth_token_secret']
     )
 
-    print 'pytumblr client created. You may run pytumblr commands prefixed with "client".\n'
+    print('pytumblr client created. You may run pytumblr commands prefixed with "client".\n')
 
     code.interact(local=dict(globals(), **{'client': client}))
