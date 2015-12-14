@@ -468,7 +468,8 @@ class TumblrRestClient(object):
     # Parameters valid for /post, /post/edit, and /post/reblog.
     def _post_valid_options(self, post_type=None):
         # These options are always valid
-        valid = ['type', 'state', 'tags', 'tweet', 'date', 'format', 'slug']
+        valid = ['type', 'state', 'tags', 'tweet', 'date', 'format', 'slug',
+                 'native_inline_images']
 
         # Other options are valid on a per-post-type basis
         if post_type == 'text':
