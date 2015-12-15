@@ -274,6 +274,7 @@ class TumblrRestClient(object):
         :param date: a string, the GMT date and time of the post
         :param format: a string, sets the format type of the post. html or markdown
         :param slug: a string, a short text summary to the end of the post url
+        :param native_inline_images: convert any external image URLs to Tumblr image URLs
         :param caption: a string, the caption that you want applied to the photo
         :param link: a string, the 'click-through' url you want on the photo
         :param source: a string, the photo source url
@@ -296,6 +297,7 @@ class TumblrRestClient(object):
         :param date: a string, the GMT date and time of the post
         :param format: a string, sets the format type of the post. html or markdown
         :param slug: a string, a short text summary to the end of the post url
+        :param native_inline_images: convert any external image URLs to Tumblr image URLs
         :param title: a string, the optional title of a post
         :param body: a string, the body of the text post
 
@@ -316,6 +318,7 @@ class TumblrRestClient(object):
         :param date: a string, the GMT date and time of the post
         :param format: a string, sets the format type of the post. html or markdown
         :param slug: a string, a short text summary to the end of the post url
+        :param native_inline_images: convert any external image URLs to Tumblr image URLs
         :param quote: a string, the full text of the quote
         :param source: a string, the cited source of the quote
 
@@ -336,6 +339,7 @@ class TumblrRestClient(object):
         :param date: a string, the GMT date and time of the post
         :param format: a string, sets the format type of the post. html or markdown
         :param slug: a string, a short text summary to the end of the post url
+        :param native_inline_images: convert any external image URLs to Tumblr image URLs
         :param title: a string, the title of the link
         :param url: a string, the url of the link you are posting
         :param description: a string, the description of the link you are posting
@@ -357,6 +361,7 @@ class TumblrRestClient(object):
         :param date: a string, the GMT date and time of the post
         :param format: a string, sets the format type of the post. html or markdown
         :param slug: a string, a short text summary to the end of the post url
+        :param native_inline_images: convert any external image URLs to Tumblr image URLs
         :param title: a string, the title of the conversation
         :param conversation: a string, the conversation you are posting
 
@@ -377,6 +382,7 @@ class TumblrRestClient(object):
         :param date: a string, the GMT date and time of the post
         :param format: a string, sets the format type of the post. html or markdown
         :param slug: a string, a short text summary to the end of the post url
+        :param native_inline_images: convert any external image URLs to Tumblr image URLs
         :param caption: a string, the caption for the post
         :param external_url: a string, the url of the audio you are uploading
         :param data: a string, the local filename path of the audio you are uploading
@@ -398,6 +404,7 @@ class TumblrRestClient(object):
         :param date: a string, the GMT date and time of the post
         :param format: a string, sets the format type of the post. html or markdown
         :param slug: a string, a short text summary to the end of the post url
+        :param native_inline_images: convert any external image URLs to Tumblr image URLs
         :param caption: a string, the caption for the post
         :param embed: a string, the emebed code that you'd like to upload
         :param data: a string, the local filename path of the video you are uploading
@@ -416,6 +423,7 @@ class TumblrRestClient(object):
         :param id: an int, the post id that you are reblogging
         :param reblog_key: a string, the reblog key of the post
         :param comment: a string, a comment added to the reblogged post
+        :param native_inline_images: convert any external image URLs to Tumblr image URLs
 
         :returns: a dict created from the JSON response
         """

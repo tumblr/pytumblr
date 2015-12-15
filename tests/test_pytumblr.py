@@ -322,5 +322,14 @@ class TumblrRestClientTest(unittest.TestCase):
         response = self.client.create_video('codingjester.tumblr.com', embed="blahblahembed")
         assert response == []
 
+    @httprettified
+    def test_native_inline_images(self):
+        HTTPretty.register_uri(HTTPretty.POST, 'https://api.tumblr.com/v2/blog/codingjester.tumblr.com/post',
+                               body='{"meta": {"status": 201, "msg": "OK"}, "response": []}')
+
+        response = self.client.create_text('codingjester.tumblr.com', native_inline_images=True)
+        assert response == []
+
+
 if __name__ == "__main__":
     unittest.main()
