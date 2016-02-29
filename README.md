@@ -176,7 +176,7 @@ client.edit_post(blogName, title="OK", data="/Users/johnb/mega/awesome.jpg"); # 
 Reblogging a post just requires knowing the post id and the reblog key, which is supplied in the JSON of any post object.
 
 ```python
-client.reblog("codingjester", 125356, "reblog_key")
+client.reblog("codingjester", id=125356, reblog_key="reblog_key")
 ```
 
 #### Deleting a post
