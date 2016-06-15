@@ -13,17 +13,17 @@ setup(
     packages = ['pytumblr'],
     license = "LICENSE",
 
-    test_suite='nose.collector',
+    #test_suite='nose.collector',
 
     install_requires = [
         'oauth2',
         'httpretty'
     ],
 
-    setup_requires=[
-        'nose',
-        'nose-cov',
-        'mock'
-    ]
+    #setup_requires=[
+    #    'nose',
+    #    'nose-cov',
+    #    'mock'
+    #]
 
 )
