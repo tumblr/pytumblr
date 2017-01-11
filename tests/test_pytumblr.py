@@ -5,7 +5,7 @@ import json
 import io
 from httpretty import HTTPretty, httprettified
 import pytumblr
-from urlparse import parse_qs
+from urllib.parse import parse_qs
 
 
 class TumblrRestClientTest(unittest.TestCase):
