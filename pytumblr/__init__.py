@@ -143,6 +143,25 @@ class TumblrRestClient(object):
         return self.send_api_request("get", url, {}, ['api_key'], True)
     
     @validate_blogname
+    def blog_following(self, blogname, **kwargs):
+        """
+        Gets the publicly exposed list of blogs that a blog follows
+
+        :param blogname: the name of the blog you want to get information on.
+                         eg: codingjester.tumblr.com
+
+        :param limit: an int, the number of blogs you want returned
+        :param offset: an int, the blog to start at, for pagination.
+
+            # Start at the 20th blog and get 20 more blogs.
+            client.blog_following('pytblr', offset=20, limit=20})
+
+        :returns: a dict created from the JSON response
+        """
+        url = "/v2/blog/{0}/following".format(blogname)
+        return self.send_api_request("get", url, kwargs, ['limit', 'offset'])
+    
+    @validate_blogname
     def followers(self, blogname, **kwargs):
         """
         Gets the followers of the given blog

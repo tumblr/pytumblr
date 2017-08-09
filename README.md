@@ -48,6 +48,7 @@ client.posts('codingjester', **params) # get posts for a blog
 client.avatar('codingjester') # get the avatar for a blog
 client.blog_likes('codingjester') # get the likes on a blog
 client.followers('codingjester') # get the followers of a blog
+client.blog_following('codingjester') # get the publicly exposed blogs that `codingjester` follows
 client.queue('codingjester') # get the queue for a given blog
 client.submission('codingjester') # get the submissions for a given blog
 ```
