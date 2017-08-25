@@ -1,4 +1,4 @@
-import urllib
+from pytumblr import helpers
 import urllib2
 import time
 import json
@@ -33,7 +33,7 @@ class TumblrRequest(object):
         """
         url = self.host + url
         if params:
-            url = url + "?" + urllib.urlencode(params)
+            url = url + "?" + helpers.encode_params(params)
 
         client = oauth.Client(self.consumer, self.token)
         try:
@@ -61,7 +61,7 @@ class TumblrRequest(object):
                 return self.post_multipart(url, params, files)
             else:
                 client = oauth.Client(self.consumer, self.token)
-                resp, content = client.request(url, method="POST", body=urllib.urlencode(params), headers=self.headers)
+                resp, content = client.request(url, method="POST", body=helpers.encode_params(params), headers=self.headers)
                 return self.json_parse(content)
         except urllib2.HTTPError, e:
             return self.json_parse(e.read())
@@ -70,16 +70,16 @@ class TumblrRequest(object):
         """
         Wraps and abstracts content validation and JSON parsing
         to make sure the user gets the correct response.
-        
+
         :param content: The content returned from the web request to be parsed as json
-        
+
         :returns: a dict of the json response
         """
         try:
             data = json.loads(content)
         except ValueError, e:
             data = {'meta': { 'status': 500, 'msg': 'Server Error'}, 'response': {"error": "Malformed JSON or HTML was returned."}}
-        
+
         #We only really care about the response if we succeed
         #and the error if we fail
         if data['meta']['status'] in [200, 201, 301]:
@@ -122,7 +122,7 @@ class TumblrRequest(object):
         """
         import mimetools
         import mimetypes
-        BOUNDARY = mimetools.choose_boundary()
+        BOUNDARY = mimetools.choose_boundary().encode('utf-8')
         CRLF = '\r\n'
         L = []
         for (key, value) in fields.items():
@@ -132,7 +132,7 @@ class TumblrRequest(object):
             L.append(value)
         for (key, filename, value) in files:
             L.append('--' + BOUNDARY)
-            L.append('Content-Disposition: form-data; name="{0}"; filename="{1}"'.format(key, filename))
+            L.append('Content-Disposition: form-data; name="{0}"; filename="{1}"'.format(key, filename.encode('utf-8')))
             L.append('Content-Type: {0}'.format(mimetypes.guess_type(filename)[0] or 'application/octet-stream'))
             L.append('Content-Transfer-Encoding: binary')
             L.append('')

@@ -1,4 +1,6 @@
 from functools import wraps
+import urllib
+
 
 def validate_params(valid_options, params):
     """
@@ -27,6 +29,18 @@ def validate_params(valid_options, params):
     if disallowed_fields:
         field_strings = ",".join(disallowed_fields)
         raise Exception("{0} are not allowed fields".format(field_strings))
+
+
+def encode_params(params):
+    """
+    Encode params to UTF-8 url parameters.
+    """
+
+    for key in params:
+        if isinstance(params[key], unicode):
+            params[key] = params[key].encode('utf-8')
+    return urllib.urlencode(params)
+
 
 def validate_blogname(fn):
     """
