@@ -67,6 +67,14 @@ class TumblrRestClientTest(unittest.TestCase):
         assert response['users'] == []
 
     @httprettified
+    def test_following(self):
+        HTTPretty.register_uri(HTTPretty.GET, 'https://api.tumblr.com/v2/blog/codingjester.tumblr.com/following',
+                               body='{"meta": {"status": 200, "msg": "OK"}, "response": {"blogs": [], "total_blogs": 1}}')
+
+        response = self.client.following('pytblr.tumblr.com')
+        assert response['blogs'] == []
+
+    @httprettified
     def test_blogLikes(self):
         HTTPretty.register_uri(HTTPretty.GET, 'https://api.tumblr.com/v2/blog/codingjester.tumblr.com/likes',
                                body='{"meta": {"status": 200, "msg": "OK"}, "response": {"liked_posts": [] } }')
