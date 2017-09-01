@@ -1,5 +1,8 @@
-from helpers import validate_params, validate_blogname
-from request import TumblrRequest
+from __future__ import absolute_import
+from builtins import str
+from builtins import object
+from .helpers import validate_params, validate_blogname
+from .request import TumblrRequest
 
 
 class TumblrRestClient(object):
@@ -39,9 +42,9 @@ class TumblrRestClient(object):
     def avatar(self, blogname, size=64):
         """
         Retrieves the url of the blog's avatar
-        
+
         :param blogname: a string, the blog you want the avatar for
-        
+
         :returns: A dict created from the JSON response
         """
         url = "/v2/blog/{0}/avatar/{1}".format(blogname, size)
@@ -106,7 +109,7 @@ class TumblrRestClient(object):
         """
         kwargs.update({'tag': tag})
         return self.send_api_request("get", '/v2/tagged', kwargs, ['before', 'limit', 'filter', 'tag', 'api_key'], True)
-    
+
     @validate_blogname
     def posts(self, blogname, type=None, **kwargs):
         """
@@ -126,9 +129,9 @@ class TumblrRestClient(object):
         if type is None:
             url = '/v2/blog/{0}/posts'.format(blogname)
         else:
-            url = '/v2/blog/{0}/posts/{1}'.format(blogname,type)
+            url = '/v2/blog/{0}/posts/{1}'.format(blogname, type)
         return self.send_api_request("get", url, kwargs, ['id', 'tag', 'limit', 'offset', 'reblog_info', 'notes_info', 'filter', 'api_key'], True)
-    
+
     @validate_blogname
     def blog_info(self, blogname):
         """
@@ -141,7 +144,7 @@ class TumblrRestClient(object):
         """
         url = "/v2/blog/{0}/info".format(blogname)
         return self.send_api_request("get", url, {}, ['api_key'], True)
-    
+
     @validate_blogname
     def blog_following(self, blogname, **kwargs):
         """
@@ -175,7 +178,7 @@ class TumblrRestClient(object):
         """
         url = "/v2/blog/{0}/followers".format(blogname)
         return self.send_api_request("get", url, kwargs, ['limit', 'offset'])
-    
+
     @validate_blogname
     def blog_likes(self, blogname, **kwargs):
         """
@@ -192,7 +195,7 @@ class TumblrRestClient(object):
         """
         url = "/v2/blog/{0}/likes".format(blogname)
         return self.send_api_request("get", url, kwargs, ['limit', 'offset', 'before', 'after'], True)
-    
+
     @validate_blogname
     def queue(self, blogname, **kwargs):
         """
@@ -302,7 +305,7 @@ class TumblrRestClient(object):
         """
         kwargs.update({"type": "photo"})
         return self._send_post(blogname, kwargs)
-    
+
     @validate_blogname
     def create_text(self, blogname, **kwargs):
         """
@@ -540,18 +543,16 @@ class TumblrRestClient(object):
         :returns: a dict parsed from the JSON response
         """
         if needs_api_key:
-            params.update({'api_key': self.request.consumer.key})
+            params.update({'api_key': self.request.consumer_key})
             valid_parameters.append('api_key')
 
-        files = []
+        files = {}
         if 'data' in params:
             if isinstance(params['data'], list):
                 for idx, data in enumerate(params['data']):
-                    with open(data, 'rb') as f:
-                        files.append(('data['+str(idx)+']', data, f.read()))
+                    files['data['+str(idx)+']'] =  open(params['data'][idx], 'rb')
             else:
-                with open(params['data'], 'rb') as f:
-                    files = [('data', params['data'], f.read())]
+                files = {'data': open(params['data'], 'rb')}
             del params['data']
 
         validate_params(valid_parameters, params)

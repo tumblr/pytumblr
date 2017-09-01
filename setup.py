@@ -16,8 +16,9 @@ setup(
     test_suite='nose.collector',
 
     install_requires = [
-        'oauth2',
-        'httpretty'
+        'future',
+        'requests-oauthlib',
+        'httpretty',
     ],
 
     tests_require=[
