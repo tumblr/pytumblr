@@ -43,14 +43,14 @@ client.unlike(id, reblogkey) # unlike a post
 ### Blog Methods
 
 ``` python
-client.blog_info('codingjester') # get information about a blog
-client.posts('codingjester', **params) # get posts for a blog
-client.avatar('codingjester') # get the avatar for a blog
-client.blog_likes('codingjester') # get the likes on a blog
-client.followers('codingjester') # get the followers of a blog
-client.blog_following('codingjester') # get the publicly exposed blogs that `codingjester` follows
-client.queue('codingjester') # get the queue for a given blog
-client.submission('codingjester') # get the submissions for a given blog
+client.blog_info(blogName) # get information about a blog
+client.posts(blogName, **params) # get posts for a blog
+client.avatar(blogName) # get the avatar for a blog
+client.blog_likes(blogName) # get the likes on a blog
+client.followers(blogName) # get the followers of a blog
+client.blog_following(blogName) # get the publicly exposed blogs that [blogName] follows
+client.queue(blogName) # get the queue for a given blog
+client.submission(blogName) # get the submissions for a given blog
 ```
 
 ### Post Methods
@@ -58,7 +58,7 @@ client.submission('codingjester') # get the submissions for a given blog
 #### Creating posts
 
 PyTumblr lets you create all of the various types that Tumblr supports. When using
-these types there are a few defaults that are able to be used with any post type. 
+these types there are a few defaults that are able to be used with any post type.
 
 The default supported types are described below.
 
@@ -81,13 +81,13 @@ Creating a photo post supports a bunch of different options plus the described d
 
 ```python
 #Creates a photo post using a source URL
-client.create_photo('codingjester', state="published", tags=["testing", "ok"], source="https://36.media.tumblr.com/b965fbb2e501610a29d80ffb6fb3e1ad/tumblr_n55vdeTse11rn1906o1_500.jpg")
+client.create_photo(blogName, state="published", tags=["testing", "ok"], source="https://68.media.tumblr.com/b965fbb2e501610a29d80ffb6fb3e1ad/tumblr_n55vdeTse11rn1906o1_500.jpg")
 
 #Creates a photo post using a local filepath
-client.create_photo('codingjester', state="queue", tags=["testing", "ok"], tweet="Woah this is an incredible sweet post [URL]", data="/Users/johnb/path/to/my/image.jpg")
+client.create_photo(blogName, state="queue", tags=["testing", "ok"], tweet="Woah this is an incredible sweet post [URL]", data="/Users/johnb/path/to/my/image.jpg")
 
 #Creates a photoset post using several local filepaths
-client.create_photo('codingjester', state="draft", tags=["jb is cool"], format="markdown", data=["/Users/johnb/path/to/my/image.jpg", "/Users/johnb/Pictures/kittens.jpg"], caption="## Mega sweet kittens")
+client.create_photo(blogName, state="draft", tags=["jb is cool"], format="markdown", data=["/Users/johnb/path/to/my/image.jpg", "/Users/johnb/Pictures/kittens.jpg"], caption="## Mega sweet kittens")
 ```
 
 ##### Creating a text post
@@ -98,7 +98,7 @@ Creating a text post supports the same options as default and just a two other p
 
 ```python
 #Creating a text post
-client.create_text("codingjester", state="published", slug="testing-text-posts", title="Testing", body="testing1 2 3 4")
+client.create_text(blogName, state="published", slug="testing-text-posts", title="Testing", body="testing1 2 3 4")
 ```
 
 #####  Creating a quote post
@@ -108,17 +108,17 @@ Creating a quote post supports the same options as default and two other paramet
 
 ```python
 #Creating a quote post
-client.create_quote("codingjester", state="queue", quote="I am the Walrus", source="Ringo")
+client.create_quote(blogName, state="queue", quote="I am the Walrus", source="Ringo")
 ```
 
 ##### Creating a link post
-* **title**       - a string, the title of post that you want. Supports HTML entities. 
-* **url**         - a string, the url that you want to create a link post for. 
+* **title**       - a string, the title of post that you want. Supports HTML entities.
+* **url**         - a string, the url that you want to create a link post for.
 * **description** - a string, the desciption of the link that you have
 
 ```python
 #Create a link post
-client.create_link('codingjester', title="I like to search things, you should too.", url="https://duckduckgo.com", description="Search is pretty cool when a duck does it.")
+client.create_link(blogName, title="I like to search things, you should too.", url="https://duckduckgo.com", description="Search is pretty cool when a duck does it.")
 ```
 
 ##### Creating a chat post
@@ -132,7 +132,7 @@ chat = """John: Testing can be fun!
 Renee: Testing is tedious and so are you.
 John: Aw.
 """
-client.create_chat('codingjester', title="Renee just doesn't understand.", conversation=chat, tags=["renee", "testing"])
+client.create_chat(blogName, title="Renee just doesn't understand.", conversation=chat, tags=["renee", "testing"])
 ```
 
 ##### Creating an audio post
@@ -144,10 +144,10 @@ cannot use both at the same time.
 * **data**         - a string, the filepath of the audio file you want to upload to Tumblr
 ```python
 #Creating an audio file
-client.create_audio('codingjester', caption="Rock out.", data="/Users/johnb/Music/my/new/sweet/album.mp3")
+client.create_audio(blogName, caption="Rock out.", data="/Users/johnb/Music/my/new/sweet/album.mp3")
 
 #lets use soundcloud!
-client.create_audio('codingjester', caption="Mega rock out.", external_url="https://soundcloud.com/skrillex/sets/recess")
+client.create_audio(blogName, caption="Mega rock out.", external_url="https://soundcloud.com/skrillex/sets/recess")
 ```
 
 ##### Creating a video post
@@ -159,10 +159,10 @@ it has some restrictions. You cannot use the embed and data parameters at the sa
 
 ```python
 #Creating an upload from YouTube
-client.create_video('codingjester', caption="Jon Snow. Mega ridiculous sword.", embed="http://www.youtube.com/watch?v=40pUYLacrj4")
+client.create_video(blogName, caption="Jon Snow. Mega ridiculous sword.", embed="http://www.youtube.com/watch?v=40pUYLacrj4")
 
 #Creating a video post from local file
-client.create_video('codingjester', caption="testing", data="/Users/johnb/testing/ok/blah.mov")
+client.create_video(blogName, caption="testing", data="/Users/johnb/testing/ok/blah.mov")
 ```
 
 #### Editing a post
@@ -170,33 +170,35 @@ Updating a post requires you knowing what type a post you're updating. You'll be
 any of the options given above for updates.
 
 ``` python
-client.edit_post(blogName, title="OK", data="/Users/johnb/mega/awesome.jpg"); # edit a post
+client.edit_post(blogName, id=post_id, type="text", title="Updated")
+client.edit_post(blogName, id=post_id, type="photo", data="/Users/johnb/mega/awesome.jpg")
 ```
 
 #### Reblogging a Post
 Reblogging a post just requires knowing the post id and the reblog key, which is supplied in the JSON of any post object.
 
 ```python
-client.reblog("codingjester", id=125356, reblog_key="reblog_key")
+client.reblog(blogName, id=125356, reblog_key="reblog_key")
 ```
 
 #### Deleting a post
 Deleting just requires that you own the post and have the post id
 ```python
-client.delete_post("codingjester", 123456) # Deletes your post :(
+client.delete_post(blogName, 123456) # Deletes your post :(
 ```
 
 A note on tags: When passing tags, as params, please pass them as a list (not
 a comma-separated string):
 
 ``` python
-client.create_text('seejohnrun', tags=['hello', 'world'], ...)
+client.create_text(blogName, tags=['hello', 'world'], ...)
 ```
 
 ### Tagged Methods
 
 ```python
-client.tagged(tag, **params); # get posts with a given tag
+# get posts with a given tag
+client.tagged(tag, **params)
 ```
 
 ## Using the interactive console
