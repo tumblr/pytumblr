@@ -81,13 +81,18 @@ Creating a photo post supports a bunch of different options plus the described d
 
 ```python
 #Creates a photo post using a source URL
-client.create_photo(blogName, state="published", tags=["testing", "ok"], source="https://68.media.tumblr.com/b965fbb2e501610a29d80ffb6fb3e1ad/tumblr_n55vdeTse11rn1906o1_500.jpg")
+client.create_photo(blogName, state="published", tags=["testing", "ok"],
+                    source="https://68.media.tumblr.com/b965fbb2e501610a29d80ffb6fb3e1ad/tumblr_n55vdeTse11rn1906o1_500.jpg")
 
 #Creates a photo post using a local filepath
-client.create_photo(blogName, state="queue", tags=["testing", "ok"], tweet="Woah this is an incredible sweet post [URL]", data="/Users/johnb/path/to/my/image.jpg")
+client.create_photo(blogName, state="queue", tags=["testing", "ok"],
+                    tweet="Woah this is an incredible sweet post [URL]",
+                    data="/Users/johnb/path/to/my/image.jpg")
 
 #Creates a photoset post using several local filepaths
-client.create_photo(blogName, state="draft", tags=["jb is cool"], format="markdown", data=["/Users/johnb/path/to/my/image.jpg", "/Users/johnb/Pictures/kittens.jpg"], caption="## Mega sweet kittens")
+client.create_photo(blogName, state="draft", tags=["jb is cool"], format="markdown",
+                    data=["/Users/johnb/path/to/my/image.jpg", "/Users/johnb/Pictures/kittens.jpg"],
+                    caption="## Mega sweet kittens")
 ```
 
 ##### Creating a text post
@@ -118,7 +123,8 @@ client.create_quote(blogName, state="queue", quote="I am the Walrus", source="Ri
 
 ```python
 #Create a link post
-client.create_link(blogName, title="I like to search things, you should too.", url="https://duckduckgo.com", description="Search is pretty cool when a duck does it.")
+client.create_link(blogName, title="I like to search things, you should too.", url="https://duckduckgo.com",
+                   description="Search is pretty cool when a duck does it.")
 ```
 
 ##### Creating a chat post
@@ -159,7 +165,8 @@ it has some restrictions. You cannot use the embed and data parameters at the sa
 
 ```python
 #Creating an upload from YouTube
-client.create_video(blogName, caption="Jon Snow. Mega ridiculous sword.", embed="http://www.youtube.com/watch?v=40pUYLacrj4")
+client.create_video(blogName, caption="Jon Snow. Mega ridiculous sword.",
+                    embed="http://www.youtube.com/watch?v=40pUYLacrj4")
 
 #Creating a video post from local file
 client.create_video(blogName, caption="testing", data="/Users/johnb/testing/ok/blah.mov")
