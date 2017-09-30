@@ -70,7 +70,7 @@ class TumblrRequest(object):
             else:
                 data = urllib.parse.urlencode(params)
                 if not PY3:
-                    data = bytes(data)
+                    data = str(data)
                 resp = requests.post(url, data=data, headers=self.headers, auth=self.oauth)
                 return self.json_parse(resp)
         except HTTPError as e:
