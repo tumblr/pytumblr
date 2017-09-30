@@ -10,15 +10,14 @@ setup(
     author="John Bunting",
     author_email="johnb@tumblr.com",
     url="https://github.com/tumblr/pytumblr",
-    packages = ['pytumblr'],
-    license = "LICENSE",
+    packages=['pytumblr'],
+    license="LICENSE",
 
     test_suite='nose.collector',
 
-    install_requires = [
+    install_requires=[
         'future',
         'requests-oauthlib',
-        'httpretty',
     ],
 
     tests_require=[
