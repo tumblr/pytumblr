@@ -21,6 +21,17 @@ def wrap_response(response_text):
     return inner
 
 
+def wrap_response_storing_data(response_text, store):
+    def inner(*args, **kwargs):
+        # store data for assertion on input
+        store.data = kwargs.get('data')
+
+        mp = mock.MagicMock()
+        mp.json.return_value = json.loads(response_text)
+        return mp
+    return inner
+
+
 class TumblrRestClientTest(unittest.TestCase):
     """
     """
@@ -124,14 +135,9 @@ class TumblrRestClientTest(unittest.TestCase):
 
     @mock.patch('requests.post')
     def test_follow(self, mock_post):
-        def mocked_post(*args, **kwargs):
-            # store data for assertion below
-            mock_post.data = kwargs.get('data')
-
-            mp = mock.MagicMock()
-            mp.json.return_value = json.loads('{"meta": {"status": 200, "msg": "OK"}, "response": []}')
-            return mp
-        mock_post.side_effect = mocked_post
+        mock_post.side_effect = wrap_response_storing_data(
+            '{"meta": {"status": 200, "msg": "OK"}, "response": []}',
+            mock_post)
 
         response = self.client.follow("codingjester.tumblr.com")
         assert response == []
@@ -140,14 +146,9 @@ class TumblrRestClientTest(unittest.TestCase):
 
     @mock.patch('requests.post')
     def test_unfollow(self, mock_post):
-        def mocked_post(*args, **kwargs):
-            # store data for assertion below
-            mock_post.data = kwargs.get('data')
-
-            mp = mock.MagicMock()
-            mp.json.return_value = json.loads('{"meta": {"status": 200, "msg": "OK"}, "response": []}')
-            return mp
-        mock_post.side_effect = mocked_post
+        mock_post.side_effect = wrap_response_storing_data(
+            '{"meta": {"status": 200, "msg": "OK"}, "response": []}',
+            mock_post)
 
         response = self.client.unfollow("codingjester.tumblr.com")
         assert response == []
@@ -156,14 +157,9 @@ class TumblrRestClientTest(unittest.TestCase):
 
     @mock.patch('requests.post')
     def test_reblog(self, mock_post):
-        def mocked_post(*args, **kwargs):
-            # store data for assertion below
-            mock_post.data = kwargs.get('data')
-
-            mp = mock.MagicMock()
-            mp.json.return_value = json.loads('{"meta": {"status": 200, "msg": "OK"}, "response": []}')
-            return mp
-        mock_post.side_effect = mocked_post
+        mock_post.side_effect = wrap_response_storing_data(
+            '{"meta": {"status": 200, "msg": "OK"}, "response": []}',
+            mock_post)
 
         response = self.client.reblog('seejohnrun', id='123', reblog_key="adsfsadf", state='coolguy', tags=['hello', 'world'])
         assert response == []
@@ -172,14 +168,9 @@ class TumblrRestClientTest(unittest.TestCase):
 
     @mock.patch('requests.post')
     def test_edit_post(self, mock_post):
-        def mocked_post(*args, **kwargs):
-            # store data for assertion below
-            mock_post.data = kwargs.get('data')
-
-            mp = mock.MagicMock()
-            mp.json.return_value = json.loads('{"meta": {"status": 200, "msg": "OK"}, "response": []}')
-            return mp
-        mock_post.side_effect = mocked_post
+        mock_post.side_effect = wrap_response_storing_data(
+            '{"meta": {"status": 200, "msg": "OK"}, "response": []}',
+            mock_post)
 
         response = self.client.edit_post('seejohnrun', id='123', state='coolguy', tags=['hello', 'world'])
         assert response == []
@@ -188,14 +179,9 @@ class TumblrRestClientTest(unittest.TestCase):
 
     @mock.patch('requests.post')
     def test_like(self, mock_post):
-        def mocked_post(*args, **kwargs):
-            # store data for assertion below
-            mock_post.data = kwargs.get('data')
-
-            mp = mock.MagicMock()
-            mp.json.return_value = json.loads('{"meta": {"status": 200, "msg": "OK"}, "response": []}')
-            return mp
-        mock_post.side_effect = mocked_post
+        mock_post.side_effect = wrap_response_storing_data(
+            '{"meta": {"status": 200, "msg": "OK"}, "response": []}',
+            mock_post)
 
         response = self.client.like('123', "adsfsadf")
         assert response == []
@@ -204,14 +190,9 @@ class TumblrRestClientTest(unittest.TestCase):
 
     @mock.patch('requests.post')
     def test_unlike(self, mock_post):
-        def mocked_post(*args, **kwargs):
-            # store data for assertion below
-            mock_post.data = kwargs.get('data')
-
-            mp = mock.MagicMock()
-            mp.json.return_value = json.loads('{"meta": {"status": 200, "msg": "OK"}, "response": []}')
-            return mp
-        mock_post.side_effect = mocked_post
+        mock_post.side_effect = wrap_response_storing_data(
+            '{"meta": {"status": 200, "msg": "OK"}, "response": []}',
+            mock_post)
 
         response = self.client.unlike('123', "adsfsadf")
         assert response == []
@@ -269,14 +250,9 @@ class TumblrRestClientTest(unittest.TestCase):
 
     @mock.patch('requests.post')
     def test_create_link(self, mock_post):
-        def mocked_post(*args, **kwargs):
-            # store data for assertion below
-            mock_post.data = kwargs.get('data')
-
-            mp = mock.MagicMock()
-            mp.json.return_value = json.loads('{"meta": {"status": 201, "msg": "OK"}, "response": []}')
-            return mp
-        mock_post.side_effect = mocked_post
+        mock_post.side_effect = wrap_response_storing_data(
+            '{"meta": {"status": 201, "msg": "OK"}, "response": []}',
+            mock_post)
 
         response = self.client.create_link('codingjester.tumblr.com', url="https://google.com", tags=['omg', 'nice'])
         assert response == []
@@ -285,14 +261,9 @@ class TumblrRestClientTest(unittest.TestCase):
 
     @mock.patch('requests.post')
     def test_no_tags(self, mock_post):
-        def mocked_post(*args, **kwargs):
-            # store data for assertion below
-            mock_post.data = kwargs.get('data')
-
-            mp = mock.MagicMock()
-            mp.json.return_value = json.loads('{"meta": {"status": 201, "msg": "OK"}, "response": []}')
-            return mp
-        mock_post.side_effect = mocked_post
+        mock_post.side_effect = wrap_response_storing_data(
+            '{"meta": {"status": 201, "msg": "OK"}, "response": []}',
+            mock_post)
 
         self.client.create_link('seejohnrun.tumblr.com', tags=[])
 
