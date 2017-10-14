@@ -78,6 +78,20 @@ class TumblrRestClientTest(unittest.TestCase):
         assert response['blog'] == {}
 
     @mock.patch('requests.get')
+    def test_avatar_with_301(self, mock_get):
+        mock_get.side_effect = wrap_response('{"meta": {"status": 301, "msg": "Moved Permanently"}, "response": {"avatar_url": "" } }')
+
+        response = self.client.avatar('staff.tumblr.com')
+        assert response['avatar_url'] == ''
+
+    @mock.patch('requests.get')
+    def test_avatar_with_302(self, mock_get):
+        mock_get.side_effect = wrap_response('{"meta": {"status": 302, "msg": "Found"}, "response": {"avatar_url": "" } }')
+
+        response = self.client.avatar('staff.tumblr.com')
+        assert response['avatar_url'] == ''
+
+    @mock.patch('requests.get')
     def test_followers(self, mock_get):
         mock_get.side_effect = wrap_response('{"meta": {"status": 200, "msg": "OK"}, "response": {"users": [] } }')
 

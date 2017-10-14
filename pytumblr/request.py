@@ -92,7 +92,7 @@ class TumblrRequest(object):
 
         # We only really care about the response if we succeed
         # and the error if we fail
-        if data['meta']['status'] in [200, 201, 301]:
+        if 200 <= data['meta']['status'] <= 399:
             return data['response']
         else:
             return data
