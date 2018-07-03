@@ -496,7 +496,7 @@ class TumblrRestClient(object):
         if post_type == 'text':
             valid += ['title', 'body']
         elif post_type == 'photo':
-            valid += ['caption', 'link', 'source', 'data']
+            valid += ['caption', 'link', 'source', 'data', 'photoset_layout']
         elif post_type == 'quote':
             valid += ['quote', 'source']
         elif post_type == 'link':
@@ -524,7 +524,7 @@ class TumblrRestClient(object):
         url = "/v2/blog/{0}/post".format(blogname)
         valid_options = self._post_valid_options(params.get('type', None))
 
-        if 'tags' in params:
+        if len(params.get("tags", [])) > 0:
             # Take a list of tags and make them acceptable for upload
             params['tags'] = ",".join(params['tags'])
 
