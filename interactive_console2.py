@@ -68,7 +68,7 @@ if __name__ == '__main__':
     # Haven't gotten creation of Client2 in this console to work yet
 
     # client = TumblrRestClient2(
-    #     "q0JO2pw9kLtmiTDxYxch2oRpzkMwzkl6xK2WxlfPg84GT1267v",
+    #     "",
     #     tokens
     # }
     #
