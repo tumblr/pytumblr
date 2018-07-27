@@ -577,13 +577,8 @@ class TumblrRestClient2(object):
         Initializes the TumblrRestClient2 object, creating the TumblrRequest
         object which deals with all request formatting.
 
-        CHANGE THIS LATER!!!
-
-        :param consumer_key: a string, the consumer key of your
-                             Tumblr Application
-        :param consumer_secret: a string, the consumer secret of
-                                your Tumblr Application
-        :param oauth_token: a string, the user specific token, received
+        :param client_id: a string, the client id of your Tumblr Application
+        :param token: a dictionary, the user specific access token, received
                             from the /access_token endpoint
         :param host: the host that are you trying to send information to,
                      defaults to https://api.tumblr.com
