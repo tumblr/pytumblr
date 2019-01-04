@@ -281,7 +281,7 @@ class TumblrRestClientTest(unittest.TestCase):
 
         self.client.create_link('seejohnrun.tumblr.com', tags=[])
 
-        assert parse_qs(mock_post.data) == parse_qs('type=link&tags=')
+        assert parse_qs(mock_post.data) == parse_qs('type=link&tags=[]')
 
     @mock.patch('requests.post')
     def test_create_quote(self, mock_post):
