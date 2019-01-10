@@ -5,5 +5,10 @@ python:
   - "3.5"
   - "3.6"
   - "pypy"
+# python 3.7 requires a newer linux distribution
+matrix:
+  include:
+    - python: 3.7
+      dist: xenial
 script:
   - python setup.py test
