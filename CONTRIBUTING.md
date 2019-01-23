@@ -14,7 +14,9 @@ We want to make contributing to pytumblr as easy and transparent as possible. If
 
 In order to accept your pull request, we need you to submit a CLA.
 
-Complete your CLA [here](http://static.tumblr.com/zyubucd/GaTngbrpr/tumblr_corporate_contributor_license_agreement_v1__10-7-14.pdf) (a more integrated web form is coming soon).
+Complete your CLA [here](https://yahoocla.herokuapp.com/).
+
+Sign in with your GitHub account read the terms and agree with typing `I AGREE` to the input bar and submit.
 
 ## License
 
