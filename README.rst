@@ -1,7 +1,26 @@
 PyTumblr
 ========
-
 |Build Status|
+
+Installation
+============
+
+Install via pip:
+
+.. code-block:: bash
+
+    $ pip install pytumblr
+
+Install from source:
+
+.. code-block:: bash
+
+    $ git clone https://github.com/tumblr/pytumblr.git
+    $ cd 3taps
+    $ python setup.py install
+
+Usage
+=====
 
 Create a client
 ---------------
