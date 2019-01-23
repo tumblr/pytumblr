@@ -42,6 +42,7 @@ Two easy ways to get your credentials to are:
 
 1. The built-in ``interactive_console.py`` tool (if you already have a consumer key & secret)
 2. The Tumblr API console at https://api.tumblr.com/console
+3. Get sample login code at https://api.tumblr.com/console/calls/user/info
 
 Supported Methods
 -----------------
