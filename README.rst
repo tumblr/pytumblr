@@ -16,7 +16,7 @@ Install from source:
 .. code-block:: bash
 
     $ git clone https://github.com/tumblr/pytumblr.git
-    $ cd 3taps
+    $ cd pytumblr
     $ python setup.py install
 
 Usage
