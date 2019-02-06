@@ -18,8 +18,8 @@ def new_oauth(yaml_path):
     '''
 
     print('Retrieve consumer key and consumer secret from http://www.tumblr.com/oauth/apps')
-    consumer_key = input('Paste the consumer key here: ')
-    consumer_secret = input('Paste the consumer secret here: ')
+    consumer_key = input('Paste the consumer key here: ').strip()
+    consumer_secret = input('Paste the consumer secret here: ').strip()
 
     request_token_url = 'http://www.tumblr.com/oauth/request_token'
     authorize_url = 'http://www.tumblr.com/oauth/authorize'
@@ -36,7 +36,7 @@ def new_oauth(yaml_path):
 
     # Redirect to authentication page
     print('\nPlease go here and authorize:\n{}'.format(full_authorize_url))
-    redirect_response = input('Allow then paste the full redirect URL here:\n')
+    redirect_response = input('Allow then paste the full redirect URL here:\n').strip()
 
     # Retrieve oauth verifier
     oauth_response = oauth_session.parse_authorization_response(redirect_response)
