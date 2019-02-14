@@ -43,7 +43,7 @@ class TestUploadCommand(Command):
             pass
 
         print('Building Source and Wheel (universal) distribution…')
-        os.system('{0} setup.py sdist bdist_wheel --universal'.format(sys.executable))
+        os.system('{} setup.py sdist bdist_wheel --universal'.format(sys.executable))
 
         print('Uploading the package to PyPi via Twine…')
         os.system('twine upload --repository-url https://test.pypi.org/legacy/ dist/*')
@@ -81,7 +81,7 @@ class UploadCommand(Command):
             pass
 
         print('Building Source and Wheel (universal) distribution…')
-        os.system('{0} setup.py sdist bdist_wheel --universal'.format(sys.executable))
+        os.system('{} setup.py sdist bdist_wheel --universal'.format(sys.executable))
 
         print('Uploading the package to PyPi via Twine…')
         os.system('twine upload dist/*')
