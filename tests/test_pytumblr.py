@@ -6,11 +6,6 @@ import mock
 import json
 import pytumblr
 from urllib.parse import parse_qs
-import sys
-if sys.version_info < (2, 7):
-    # python 2.6 may show ssl warnings, which we don't care about for these tests
-    import urllib3
-    urllib3.disable_warnings()
 
 
 def wrap_response(response_text):
