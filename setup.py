@@ -43,7 +43,7 @@ class TestUploadCommand(Command):
             pass
 
         print('Building Source and Wheel (universal) distribution…')
-        os.system('{0} setup.py sdist bdist_wheel --universal'.format(sys.executable))
+        os.system('{} setup.py sdist bdist_wheel --universal'.format(sys.executable))
 
         print('Uploading the package to PyPi via Twine…')
         os.system('twine upload --repository-url https://test.pypi.org/legacy/ dist/*')
@@ -81,7 +81,7 @@ class UploadCommand(Command):
             pass
 
         print('Building Source and Wheel (universal) distribution…')
-        os.system('{0} setup.py sdist bdist_wheel --universal'.format(sys.executable))
+        os.system('{} setup.py sdist bdist_wheel --universal'.format(sys.executable))
 
         print('Uploading the package to PyPi via Twine…')
         os.system('twine upload dist/*')
@@ -102,19 +102,19 @@ setup(
     license="Apache Software License 2.0",
     zip_safe=False,
     keywords='pytumblr',
+    python_requires=">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*",
     classifiers=[
         'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: Apache Software License',
         'Natural Language :: English',
         "Programming Language :: Python :: 2",
-        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
         'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
     ],
 
     test_suite='nose.collector',
