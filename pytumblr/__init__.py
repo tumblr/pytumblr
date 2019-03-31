@@ -495,7 +495,7 @@ class TumblrRestClient(object):
 
         :param blogname: a string, the url of the blog that houses the post
         :param id: a string, the id of the post.
-        :param mode: a list of tags that you want applied to the post
+        :param mode: a string. Undocumented. Automatically added by tumblr but it's use is not yet known.
         :param before_timestamp: a string, retreives data before this timestamp
 
         :returns: a dict created from the JSON response
