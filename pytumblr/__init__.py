@@ -164,7 +164,7 @@ class TumblrRestClient(object):
         """
         url = "/v2/blog/{}/following".format(blogname)
         return self.send_api_request("get", url, kwargs, ['limit', 'offset'])
-    
+
     @validate_blogname
     def followers(self, blogname, **kwargs):
         """
@@ -487,6 +487,23 @@ class TumblrRestClient(object):
 
         valid_options = ['id'] + self._post_valid_options(kwargs.get('type', None))
         return self.send_api_request('post', url, kwargs, valid_options)
+
+    @validate_blogname
+    def get_post_notes(self, blogname, id, **kwargs):
+        """
+        Gets the notes
+
+        :param blogname: a string, the url of the blog that houses the post
+        :param id: a string, the id of the post.
+        :param mode: a list of tags that you want applied to the post
+        :param before_timestamp: a string, retreives data before this timestamp
+
+        :returns: a dict created from the JSON response
+        """
+        url = "/v2/blog/{}/notes".format(blogname)
+        valid_options = ['id', "mode", "before_timestamp"]
+        kwargs.update({"id":id})
+        return self.send_api_request('get', url, kwargs, valid_options)
 
     # Parameters valid for /post, /post/edit, and /post/reblog.
     def _post_valid_options(self, post_type=None):
