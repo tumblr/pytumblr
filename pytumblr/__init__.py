@@ -489,7 +489,7 @@ class TumblrRestClient(object):
         return self.send_api_request('post', url, kwargs, valid_options)
 
     @validate_blogname
-    def notes_post(self, blogname, id, **kwargs):
+    def notes(self, blogname, id, **kwargs):
         """
         Gets the notes
 
