@@ -115,6 +115,13 @@ class TumblrRestClientTest(unittest.TestCase):
         assert response['liked_posts'] == []
 
     @mock.patch('requests.get')
+    def test_notes(self, mock_get):
+        mock_get.side_effect = wrap_response('{"meta": {"status": 200, "msg": "OK"}, "response": {"notes": [], "total_notes": 1, "can_hide_or_delete_notes": False} }')
+
+        response = self.client.notes('codingjester.tumblr.com', id='123456789098')
+        assert response["notes"] == []
+
+    @mock.patch('requests.get')
     def test_blogLikes_with_before(self, mock_get):
         mock_get.side_effect = wrap_response('{"meta": {"status": 200, "msg": "OK"}, "response": {"liked_posts": [] } }')
 
@@ -174,6 +181,7 @@ class TumblrRestClientTest(unittest.TestCase):
         assert response == []
 
         assert parse_qs(mock_post.data) == parse_qs('state=coolguy&reblog_key=adsfsadf&id=123&tags=hello%2Cworld')
+
 
     @mock.patch('requests.post')
     def test_edit_post(self, mock_post):
@@ -312,6 +320,8 @@ class TumblrRestClientTest(unittest.TestCase):
 
         response = self.client.create_video('codingjester.tumblr.com', embed="blahblahembed")
         assert response == []
+
+
 
 
 if __name__ == "__main__":
