@@ -501,7 +501,7 @@ class TumblrRestClient(object):
         :returns: a dict created from the JSON response
         """
         url = "/v2/blog/{}/notes".format(blogname)
-        valid_options = ['id', "mode", "before_timestamp"]
+        valid_options = ["id", "mode", "before_timestamp"]
         kwargs.update({"id":id})
         return self.send_api_request('get', url, kwargs, valid_options)
 
