@@ -232,13 +232,13 @@ In order to get the notes for a post, you need to have the post id and the blog 
 
 .. code:: python
 
-    data = client.notes_post(blogName, id='123456')
+    data = client.notes(blogName, id='123456')
 
 The results include a timestamp you can use to make future calls.
 
 .. code:: python
 
-    data = client.notes_post(blogName, id='123456', before_timestamp=data["_links"]["next"]["query_params"]["before_timestamp"])
+    data = client.notes(blogName, id='123456', before_timestamp=data["_links"]["next"]["query_params"]["before_timestamp"])
 
 
 Tagged Methods
