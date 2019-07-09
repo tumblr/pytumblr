@@ -559,5 +559,7 @@ class TumblrRestClient(object):
         validate_params(valid_parameters, params)
         if method == "get":
             return self.request.get(url, params)
+        elif method == "delete":
+            return self.request.delete(url, params)
         else:
             return self.request.post(url, params, files)
