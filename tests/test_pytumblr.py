@@ -115,6 +115,13 @@ class TumblrRestClientTest(unittest.TestCase):
         assert response['liked_posts'] == []
 
     @mock.patch('requests.get')
+    def test_notes(self, mock_get):
+        mock_get.side_effect = wrap_response('{"meta": {"status": 200, "msg": "OK"}, "response": {"notes": [], "total_notes": 1, "can_hide_or_delete_notes": false} }')
+
+        response = self.client.notes('codingjester.tumblr.com', id='123456789098')
+        assert response["notes"] == []
+
+    @mock.patch('requests.get')
     def test_blogLikes_with_before(self, mock_get):
         mock_get.side_effect = wrap_response('{"meta": {"status": 200, "msg": "OK"}, "response": {"liked_posts": [] } }')
 
