@@ -225,6 +225,22 @@ A note on tags: When passing tags, as params, please pass them as a list (not a 
 
     client.create_text(blogName, tags=['hello', 'world'], ...)
 
+Getting notes for a post
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+In order to get the notes for a post, you need to have the post id and the blog that it is on.
+
+.. code:: python
+
+    data = client.notes(blogName, id='123456')
+
+The results include a timestamp you can use to make future calls.
+
+.. code:: python
+
+    data = client.notes(blogName, id='123456', before_timestamp=data["_links"]["next"]["query_params"]["before_timestamp"])
+
+
 Tagged Methods
 ~~~~~~~~~~~~~~
 
