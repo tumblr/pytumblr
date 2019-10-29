@@ -76,22 +76,32 @@ class TumblrRequest(object):
         except HTTPError as e:
             return self.json_parse(e.response)
 
-    def delete(self, url, params):
+    def delete(self, url, params, use_body=False):
         """
         Issues a DELETE request against the API, properly formatting the params
 
         :param url: a string, the url you are requesting
         :param params: a dict, the key-value of all the paramaters needed
                        in the request
+        :param use_body: a boolean, put params in request body rather than the URL
+
         :returns: a dict parsed of the JSON response
         """
         url = self.host + url
-        if params:
-            url = url + "?" + urllib.parse.urlencode(params)
 
         try:
-            resp = requests.delete(url, allow_redirects=False, headers=self.headers, auth=self.oauth)
+            if use_body:
+                data = urllib.parse.urlencode(params)
+                if not PY3:
+                    data = str(data)
+                resp = requests.delete(url, data=data, headers=self.headers, auth=self.oauth)
+            else:
+                if params:
+                    url = url + "?" + urllib.parse.urlencode(params)
+                resp = requests.delete(url, allow_redirects=False, headers=self.headers, auth=self.oauth)
         except TooManyRedirects as e:
+            resp = e.response
+        except HTTPError as e:
             resp = e.response
 
         return self.json_parse(resp)
