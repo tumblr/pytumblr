@@ -131,7 +131,7 @@ class TumblrRestClient(object):
             url = '/v2/blog/{}/posts'.format(blogname)
         else:
             url = '/v2/blog/{}/posts/{}'.format(blogname, type)
-        return self.send_api_request("get", url, kwargs, ['id', 'tag', 'limit', 'offset', 'before', 'reblog_info', 'notes_info', 'filter', 'api_key'], True)
+        return self.send_api_request("get", url, kwargs, ['id', 'tag', 'limit', 'offset', 'before', 'reblog_info', 'notes_info', 'filter', 'api_key', 'npf'], True)
 
     @validate_blogname
     def blog_info(self, blogname):
@@ -209,7 +209,7 @@ class TumblrRestClient(object):
         :returns: a dict created from the JSON response
         """
         url = "/v2/blog/{}/posts/queue".format(blogname)
-        return self.send_api_request("get", url, kwargs, ['limit', 'offset', 'filter'])
+        return self.send_api_request("get", url, kwargs, ['limit', 'offset', 'filter', 'npf'])
 
     @validate_blogname
     def drafts(self, blogname, **kwargs):
@@ -220,12 +220,12 @@ class TumblrRestClient(object):
         :returns: a dict created from the JSON response
         """
         url = "/v2/blog/{}/posts/draft".format(blogname)
-        return self.send_api_request("get", url, kwargs, ['filter'])
+        return self.send_api_request("get", url, kwargs, ['filter', 'npf'])
 
     @validate_blogname
     def submission(self, blogname, **kwargs):
         """
-        Gets posts that are currently in the blog's queue
+        Gets posts that are currently in the blog's submission list
 
         :param offset: an int, the post you want to start at, for pagination.
         :param filter: the post format that you want returned: HTML, text, raw.
@@ -233,7 +233,7 @@ class TumblrRestClient(object):
         :returns: a dict created from the JSON response
         """
         url = "/v2/blog/{}/posts/submission".format(blogname)
-        return self.send_api_request("get", url, kwargs, ["offset", "filter"])
+        return self.send_api_request("get", url, kwargs, ['offset', 'filter', 'npf'])
 
     @validate_blogname
     def follow(self, blogname):
