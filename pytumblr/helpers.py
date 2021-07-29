@@ -41,7 +41,7 @@ def validate_blogname(fn):
     """
     @wraps(fn)
     def add_dot_tumblr(*args, **kwargs):
-        if (len(args) > 1 and ("." not in args[1])):
+        if (len(args) > 1 and ("." not in args[1]) and ("t:" not in args[1])):
             args = list(args)
             args[1] += ".tumblr.com"
         return fn(*args, **kwargs)
