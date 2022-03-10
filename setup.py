@@ -91,13 +91,13 @@ class UploadCommand(Command):
 
 setup(
     name="PyTumblr",
-    version="0.1.0",
+    version="0.1.1",
     description="A Python API v2 wrapper for Tumblr",
     long_description=long_description,
     author="Tumblr",
     author_email="accounts@tumblr.com",
     url="https://github.com/tumblr/pytumblr",
-    download_url="https://github.com/tumblr/pytumblr/archive/0.1.0.tar.gz",
+    download_url="https://github.com/tumblr/pytumblr/archive/0.1.1.tar.gz",
     packages=['pytumblr'],
     license="Apache Software License 2.0",
     zip_safe=False,
