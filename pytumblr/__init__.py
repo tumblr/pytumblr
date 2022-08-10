@@ -222,7 +222,7 @@ class TumblrRestClient(object):
         :returns: a dict created from the JSON response
         """
         url = "/v2/blog/{}/posts/queue/reorder".format(blogname)
-        return self.send_api_request("get", url, kwargs, ['post_id', 'insert_after'])
+        return self.send_api_request("post", url, kwargs, ['post_id', 'insert_after'])
  
     @validate_blogname
     def queue_shuffle(self, blogname, **kwargs):
@@ -231,8 +231,8 @@ class TumblrRestClient(object):
 
         :returns: a dict created from the JSON response
         """
-        url = "/v2/blog/{}/posts/queue/reorder".format(blogname)
-        return self.send_api_request("post", url, kwargs, [])
+        url = "/v2/blog/{}/posts/queue/shuffle".format(blogname)
+        return self.send_api_request("post", url)
 
     @validate_blogname
     def drafts(self, blogname, **kwargs):
@@ -603,3 +603,4 @@ class TumblrRestClient(object):
             return self.request.delete(url, params)
         else:
             return self.request.post(url, params, files)
+        
