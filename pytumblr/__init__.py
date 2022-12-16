@@ -505,6 +505,58 @@ class TumblrRestClient(object):
         kwargs.update({"id":id})
         return self.send_api_request('get', url, kwargs, valid_options)
 
+    @validate_blogname
+    def block(self, blogname, block_user=None, block_post=None):
+        """
+        Block a blog from the given blog.
+        :param blogname: a string, the url of the blog doing the blocking
+        :param block_user: a string, the url of the blog to be blocked. Only if block_post is not passed.
+        :param block_post: a string, the id of the post to be blocked. Only if block_user is not passed.
+
+        :returns: a dict created from the JSON response
+        """
+        url = '/v2/blog/{}/blocks'.format(blogname)
+
+        if block_user is not None and block_post is not None:
+            raise RuntimeError('Either block_user or block_post needs to be unassigned.')
+        
+        valid_options = ['blocked_tumblelog', 'post_id']
+        if block_user is not None:
+            self.send_api_request('post', url, {'blocked_tumblelog' : block_user}, valid_options)
+        elif block_post is not None:
+            self.send_api_request('post', url, {'post_id' : block_post}, valid_options)
+
+    @validate_blogname
+    def bulk_block(self, blogname, block_users):
+        """
+        Block a whole bunch of blogs from the given blog.
+        :param blogname: a string, the url of the blog doing the blocking
+        :param block_users: a list of strings, the urls of all blogs to be blocked.
+        """
+        url = '/v2/blog/{}/blocks/bulk'.format(blogname)
+
+        #format the list into comma-seperated string
+        block_string = block_users[0]
+        if len(block_users) > 1:
+            for identifier in block_users[1:]:
+                block_string += ',{}'.format(identifier)
+        valid_options = ['blocked_tumblelogs']
+        self.send_api_request('post', url, {'blocked_tumblelogs' : block_string}, valid_options)
+
+    @validate_blogname
+    def unblock(self, blogname, unblock_user):
+        """
+        Unblock a blog from the given blog.
+        :param blogname: a string, the url of the blog holding the block
+        :param ubblock_user: a string, the url of the blog to be unblocked.
+
+        :returns: a dict created from the JSON response
+        """
+        url = '/v2/blog/{}/blocks'.format(blogname)
+
+        valid_options = ['blocked_tumblelog']
+        self.send_api_request('delete', url, {'blocked_tumblelog' : unblock_user}, valid_options)
+    
     # Parameters valid for /post, /post/edit, and /post/reblog.
     def _post_valid_options(self, post_type=None):
         # These options are always valid
