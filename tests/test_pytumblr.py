@@ -320,6 +320,26 @@ class TumblrRestClientTest(unittest.TestCase):
         response = self.client.create_video('codingjester.tumblr.com', embed="blahblahembed")
         assert response == []
 
+    @mock.patch('requests.post')
+    def test_block_user(self, mock_post):
+        mock_post.side_effect = wrap_response_storing_data(
+            '{"meta": {"status": 200, "msg": "OK"}, "response": []}',
+            mock_post)
+
+        response = self.client.block("flareongirlfloof.tumblr.com", "codingjester.tumblr.com")
+        assert response == []
+
+    @mock.patch('requests.delete')
+    def test_unblock_user(self, mock_post):
+        mock_post.side_effect = wrap_response_storing_data(
+            '{"meta": {"status": 200, "msg": "OK"}, "response": []}',
+            mock_post)
+
+        response = self.client.unblock("flareongirlfloof.tumblr.com", "codingjester.tumblr.com")
+        assert response == []
+
+
+
     @mock.patch('requests.delete')
     def test_api_delete(self, mock_delete):
         mock_delete.side_effect = wrap_response('{"meta": {"status": 200, "msg": "OK"}, "response": []}')
