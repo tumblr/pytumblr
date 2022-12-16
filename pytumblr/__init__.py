@@ -522,9 +522,9 @@ class TumblrRestClient(object):
         
         valid_options = ['blocked_tumblelog', 'post_id']
         if block_user is not None:
-            self.send_api_request('post', url, {'blocked_tumblelog' : block_user}, valid_options)
+            return self.send_api_request('post', url, {'blocked_tumblelog' : block_user}, valid_options)
         elif block_post is not None:
-            self.send_api_request('post', url, {'post_id' : block_post}, valid_options)
+            return self.send_api_request('post', url, {'post_id' : block_post}, valid_options)
 
     @validate_blogname
     def bulk_block(self, blogname, block_users):
@@ -541,7 +541,7 @@ class TumblrRestClient(object):
             for identifier in block_users[1:]:
                 block_string += ',{}'.format(identifier)
         valid_options = ['blocked_tumblelogs']
-        self.send_api_request('post', url, {'blocked_tumblelogs' : block_string}, valid_options)
+        return self.send_api_request('post', url, {'blocked_tumblelogs' : block_string}, valid_options)
 
     @validate_blogname
     def unblock(self, blogname, unblock_user):
@@ -555,7 +555,7 @@ class TumblrRestClient(object):
         url = '/v2/blog/{}/blocks'.format(blogname)
 
         valid_options = ['blocked_tumblelog']
-        self.send_api_request('delete', url, {'blocked_tumblelog' : unblock_user}, valid_options)
+        return self.send_api_request('delete', url, {'blocked_tumblelog' : unblock_user}, valid_options)
     
     # Parameters valid for /post, /post/edit, and /post/reblog.
     def _post_valid_options(self, post_type=None):
