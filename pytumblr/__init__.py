@@ -198,6 +198,58 @@ class TumblrRestClient(object):
         return self.send_api_request("get", url, kwargs, ['limit', 'offset', 'before', 'after'], True)
 
     @validate_blogname
+    def blog_blocks(self, blogname, **kwargs):
+        """
+        Get the blogs that the requested blog is currently blocking.
+        :param offset: an int, the like you want to start at, for pagination.
+        :param limit: an int, the number of likes you want returned
+
+            # Start at the 20th blocked blog and get 20 more blockd blogs.
+            client.blog_blocks(blogname, {'offset': 0, 'limit': 20})
+
+        :returns: A dict created from the JSON response
+        """
+        url = "/v2/blog/{}/blocks".format(blogname)
+        return self.send_api_request("get", url, kwargs, ['offset', 'limit'])
+        
+    @validate_blogname
+    def block_blog(self, blogname, **kwargs):
+        """
+        Block a blog.
+        :param blocked_tumblelog: a string, the tumblelog to block, specified by any blog identifier
+        :param post_id: a string, the anonymous post ID (asks, submissions) to block
+
+        :returns: 201 Created or an error code
+        """
+        url = "/v2/blog/{}/blocks".format(blogname)
+        return self.send_api_request("post", url, kwargs, ['blocked_tumblelog', 'post_id'])
+         
+    @validate_blogname
+    def block_blogs(self, blogname, **kwargs):
+        """
+        Block a list of blogs.
+        :param blocked_tumblelogs: a string, comma-separated list of tumblelogs to block, specified by any blog identifier
+        :param force: a bool, whether to force the block to go through even if it requires canceling a Post+ Subscription
+
+        :returns: 200 OK or an error code
+        """
+        url = "/v2/blog/{}/blocks/bulk".format(blogname)
+        return self.send_api_request("post", url, kwargs, ['blocked_tumblelogs', 'force'])
+         
+    @validate_blogname
+    def unblock(self, blogname, **kwargs):
+        """
+        Remove a block.
+        :param blocked_tumblelog: a string, the tumblelog whose block to remove, specified by any blog identifier
+        :param anonymous_only: a bool, when passed without the blocked_tumblelog parameter, this will clear all anonymous IP blocks
+
+        :returns: 200 OK if the block on the passed blocked_tumblelog parameter was successfully removed
+        :returns: 200 OK if all anonymous blocks were successfully removed when anonymous_only=true was passed without a blocked_tumblelog parameter in the path
+        """
+        url = "/v2/blog/{}/blocks".format(blogname)
+        return self.send_api_request("delete", url, kwargs, ['blocked_tumblelog', 'anonymous_only'])
+
+    @validate_blogname
     def queue(self, blogname, **kwargs):
         """
         Gets posts that are currently in the blog's queue
@@ -252,7 +304,7 @@ class TumblrRestClient(object):
         """
         Unfollow the url of the given blog
 
-        :param blogname: a string, the blog url you want to follow
+        :param blogname: a string, the blog url you want to unfollow
 
         :returns: a dict created from the JSON response
         """
