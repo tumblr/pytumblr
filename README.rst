@@ -17,7 +17,7 @@ Install from source:
 
     $ git clone https://github.com/tumblr/pytumblr.git
     $ cd pytumblr
-    $ python setup.py install
+    $ python -m build
 
 Usage
 =====
@@ -258,7 +258,7 @@ You'll need ``pyyaml`` installed to run it, but then it's just:
 
 .. code:: bash
 
-    $ python interactive-console.py
+    $ python interactive_console.py
 
 and away you go! Tokens are stored in ``~/.tumblr`` and are also shared by other Tumblr API clients like the Ruby client.
 
