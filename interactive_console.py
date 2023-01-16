@@ -67,7 +67,11 @@ def new_oauth(yaml_path):
     return tokens
 
 if __name__ == '__main__':
-    yaml_path = os.path.expanduser('~') + '/.tumblr/pytumblr.yaml'
+    yaml_path = os.path.expanduser('~') + '/.tumblr'
+    alternate_path = os.path.expanduser('~') + '/.pytumblr'
+
+    if os.path.isdir(yaml_path) or os.path.exists(alternate_path):
+        yaml_path = alternate_path
 
     if not os.path.exists(yaml_path):
         tokens = new_oauth(yaml_path)
