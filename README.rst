@@ -17,7 +17,7 @@ Install from source:
 
     $ git clone https://github.com/tumblr/pytumblr.git
     $ cd pytumblr
-    $ python setup.py install
+    $ python -m build
 
 Usage
 =====
@@ -258,7 +258,7 @@ You'll need ``pyyaml`` installed to run it, but then it's just:
 
 .. code:: bash
 
-    $ python interactive-console.py
+    $ python interactive_console.py
 
 and away you go! Tokens are stored in ``~/.tumblr`` and are also shared by other Tumblr API clients like the Ruby client.
 
@@ -282,5 +282,5 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations.
 
-.. |Build Status| image:: https://travis-ci.org/tumblr/pytumblr.png?branch=master
-   :target: https://travis-ci.org/tumblr/pytumblr
+.. |Build Status| image:: https://github.com/tumblr/pytumblr/actions/workflows/ci.yaml/badge.svg
+   :target: https://github.com/tumblr/pytumblr/actions/workflows/ci.yaml

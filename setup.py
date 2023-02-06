@@ -91,7 +91,7 @@ class UploadCommand(Command):
 
 setup(
     name="PyTumblr",
-    version="0.1.1",
+    version="0.1.2",
     description="A Python API v2 wrapper for Tumblr",
     long_description=long_description,
     author="Tumblr",
