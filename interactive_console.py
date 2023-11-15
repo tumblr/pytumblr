@@ -5,10 +5,15 @@ standard_library.install_aliases()
 from builtins import input
 
 import pytumblr
-import yaml
 import os
 import code
 from requests_oauthlib import OAuth1Session
+try:
+    import yaml
+except ImportError:
+    print('You need PyYAML to run interactive console\npip install pyyaml')
+    import sys
+    sys.exit(-1)
 
 
 def new_oauth(yaml_path):
