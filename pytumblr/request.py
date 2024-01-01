@@ -11,6 +11,19 @@ from requests_oauthlib import OAuth1
 from requests.exceptions import TooManyRedirects, HTTPError
 
 
+class RateLimitError(IOError):
+    """Thrown when errors related to rate limiting occur."""
+
+    def __init__(self, *args, **kwargs):
+        """Initialize RateLimitError with `request` and `response` objects."""
+        response = kwargs.pop('response', None)
+        self.response = response
+        self.request = kwargs.pop('request', None)
+        if (response is not None and not self.request and
+                hasattr(response, 'request')):
+            self.request = self.response.request
+        super(RateLimitError, self).__init__(*args, **kwargs)
+
 class TumblrRequest(object):
     """
     A simple request object that lets us query the Tumblr API
@@ -18,7 +31,7 @@ class TumblrRequest(object):
 
     __version = "0.1.2"
 
-    def __init__(self, consumer_key, consumer_secret="", oauth_token="", oauth_secret="", host="https://api.tumblr.com"):
+    def __init__(self, consumer_key, consumer_secret="", oauth_token="", oauth_secret="", host="https://api.tumblr.com", connect_timeout=None, read_timeout=None):
         self.host = host
         self.oauth = OAuth1(
             consumer_key,
@@ -27,6 +40,7 @@ class TumblrRequest(object):
             resource_owner_secret=oauth_secret
         )
         self.consumer_key = consumer_key
+        self.timeout=(connect_timeout,read_timeout) if connect_timeout or read_timeout else None
 
         self.headers = {
             "User-Agent": "pytumblr/" + self.__version,
@@ -46,7 +60,9 @@ class TumblrRequest(object):
             url = url + "?" + urllib.parse.urlencode(params)
 
         try:
-            resp = requests.get(url, allow_redirects=False, headers=self.headers, auth=self.oauth)
+            resp = requests.get(url, allow_redirects=False, headers=self.headers, auth=self.oauth, timeout=self.timeout)
+            if resp.status_code == 429:
+                raise RateLimitError(resp.reason, response=resp)
         except TooManyRedirects as e:
             resp = e.response
 
@@ -71,7 +87,9 @@ class TumblrRequest(object):
                 data = urllib.parse.urlencode(params)
                 if not PY3:
                     data = str(data)
-                resp = requests.post(url, data=data, headers=self.headers, auth=self.oauth)
+                resp = requests.post(url, data=data, headers=self.headers, auth=self.oauth, timeout=self.timeout)
+                if resp.status_code == 429:
+                    raise RateLimitError(resp.reason, response=resp)
                 return self.json_parse(resp)
         except HTTPError as e:
             return self.json_parse(e.response)
@@ -134,6 +152,12 @@ class TumblrRequest(object):
             files=files,
             headers=self.headers,
             allow_redirects=False,
-            auth=self.oauth
+            auth=self.oauth,
+            timeout=self.timeout
         )
+        if resp.status_code == 429:
+            raise RateLimitError(resp.reason, response=resp)
+
         return self.json_parse(resp)
+
+    
