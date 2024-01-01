@@ -548,7 +548,7 @@ class TumblrRestClient(object):
 
         return self.send_api_request("post", url, params, valid_options)
 
-    def send_api_request(self, method, url, params={}, valid_parameters=[], needs_api_key=False):
+    def send_api_request(self, method, url, params={}, valid_parameters=[], needs_api_key=False, use_body=False):
         """
         Sends the url with parameters to the requested url, validating them
         to make sure that they are what we expect to have passed to us
@@ -557,6 +557,7 @@ class TumblrRestClient(object):
         :param params: a dict, the parameters used for the API request
         :param valid_parameters: a list, the list of valid parameters
         :param needs_api_key: a boolean, whether or not your request needs an api key injected
+        :param use_body: a boolean, put params in request body rather than the URL
 
         :returns: a dict parsed from the JSON response
         """
@@ -577,6 +578,6 @@ class TumblrRestClient(object):
         if method == "get":
             return self.request.get(url, params)
         elif method == "delete":
-            return self.request.delete(url, params)
+            return self.request.delete(url, params, use_body)
         else:
             return self.request.post(url, params, files)
