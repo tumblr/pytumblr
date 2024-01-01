@@ -210,6 +210,29 @@ class TumblrRestClient(object):
         """
         url = "/v2/blog/{}/posts/queue".format(blogname)
         return self.send_api_request("get", url, kwargs, ['limit', 'offset', 'filter', 'npf'])
+    
+    @validate_blogname
+    def queue_reorder(self, blogname, **kwargs):
+        """
+        Moves posts that are in the blog's queue
+
+        :param post_id: an int, the post you want to move
+        :param insert_after: an int, the id of the post you want the target post inserted after
+
+        :returns: a dict created from the JSON response
+        """
+        url = "/v2/blog/{}/posts/queue/reorder".format(blogname)
+        return self.send_api_request("post", url, kwargs, ['post_id', 'insert_after'])
+ 
+    @validate_blogname
+    def queue_shuffle(self, blogname, **kwargs):
+        """
+        Randomly shuffles posts that are in the blog's queue
+
+        :returns: a dict created from the JSON response
+        """
+        url = "/v2/blog/{}/posts/queue/shuffle".format(blogname)
+        return self.send_api_request("post", url)
 
     @validate_blogname
     def drafts(self, blogname, **kwargs):
@@ -580,3 +603,4 @@ class TumblrRestClient(object):
             return self.request.delete(url, params)
         else:
             return self.request.post(url, params, files)
+        

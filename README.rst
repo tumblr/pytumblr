@@ -75,6 +75,8 @@ Blog Methods
     client.followers(blogName) # get the followers of a blog
     client.blog_following(blogName) # get the publicly exposed blogs that [blogName] follows
     client.queue(blogName) # get the queue for a given blog
+    client.queue_reorder(blogName **params) # reorder posts in the queue of a blog relative to each other
+    client.queue_shuffle(blogName ) # randomly reorder the queue of a blog
     client.submission(blogName) # get the submissions for a given blog
 
 Post Methods
