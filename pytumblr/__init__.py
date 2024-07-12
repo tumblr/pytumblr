@@ -108,7 +108,7 @@ class TumblrRestClient(object):
         :returns: a dict created from the JSON response
         """
         kwargs.update({'tag': tag})
-        return self.send_api_request("get", '/v2/tagged', kwargs, ['before', 'limit', 'filter', 'tag', 'api_key'], True)
+        return self.send_api_request("get", '/v2/tagged', kwargs, ['before', 'limit', 'filter', 'tag', 'api_key', 'npf'], True)
 
     @validate_blogname
     def posts(self, blogname, type=None, **kwargs):
