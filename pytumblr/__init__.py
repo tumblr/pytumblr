@@ -489,6 +489,21 @@ class TumblrRestClient(object):
         return self.send_api_request('post', url, kwargs, valid_options)
 
     @validate_blogname
+    def mute(self, blogname, post_id=None, time=0):
+        """
+        Mute the notifications of the given post
+
+        :param blogname: a string, the blog url with the post
+
+        :param post_id: an int, the post id you wish to mute 
+
+        :param time: an int, how many seconds the post should be muted (0 or no input = forever) 
+        """
+        params = {'blog-identifier': blogname, 'post-id': post_id, 'mute_length_seconds': time}
+        url = "/v2/blog/" + blogname + "/posts/" + str(post_id) + "/mute"
+        return self.send_api_request("post", url, params, ['blog-identifier', 'post-id', 'mute_length_seconds'])
+
+    @validate_blogname
     def notes(self, blogname, id, **kwargs):
         """
         Gets the notes
