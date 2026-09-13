@@ -7,6 +7,7 @@ from builtins import input
 import pytumblr
 import os
 import code
+import getpass
 from requests_oauthlib import OAuth1Session
 try:
     import yaml
@@ -15,6 +16,8 @@ except ImportError:
     import sys
     sys.exit(-1)
 
+from pytumblr.credentials import load_credentials, save_credentials
+
 
 def new_oauth(yaml_path):
     '''
@@ -22,17 +25,19 @@ def new_oauth(yaml_path):
     save in a yaml file in the user's home directory.
     '''
 
-    print('Retrieve consumer key and consumer secret from http://www.tumblr.com/oauth/apps')
+    print('Retrieve consumer key and consumer secret from https://www.tumblr.com/oauth/apps')
     consumer_key = input('Paste the consumer key here: ').strip()
-    consumer_secret = input('Paste the consumer secret here: ').strip()
+    consumer_secret = getpass.getpass(
+        'Paste the consumer secret here: '
+    ).strip()
 
-    request_token_url = 'http://www.tumblr.com/oauth/request_token'
-    authorize_url = 'http://www.tumblr.com/oauth/authorize'
-    access_token_url = 'http://www.tumblr.com/oauth/access_token'
+    request_token_url = 'https://www.tumblr.com/oauth/request_token'
+    authorize_url = 'https://www.tumblr.com/oauth/authorize'
+    access_token_url = 'https://www.tumblr.com/oauth/access_token'
 
     # STEP 1: Obtain request token
     oauth_session = OAuth1Session(consumer_key, client_secret=consumer_secret)
-    fetch_response = oauth_session.fetch_request_token(request_token_url)
+    fetch_response = oauth_session.fetch_request_token(request_token_url, timeout=30)
     resource_owner_key = fetch_response.get('oauth_token')
     resource_owner_secret = fetch_response.get('oauth_token_secret')
 
@@ -56,7 +61,7 @@ def new_oauth(yaml_path):
         resource_owner_secret=resource_owner_secret,
         verifier=verifier
     )
-    oauth_tokens = oauth_session.fetch_access_token(access_token_url)
+    oauth_tokens = oauth_session.fetch_access_token(access_token_url, timeout=30)
 
     tokens = {
         'consumer_key': consumer_key,
@@ -65,9 +70,7 @@ def new_oauth(yaml_path):
         'oauth_token_secret': oauth_tokens.get('oauth_token_secret')
     }
 
-    yaml_file = open(yaml_path, 'w+')
-    yaml.dump(tokens, yaml_file, indent=2)
-    yaml_file.close()
+    save_credentials(yaml_path, tokens)
 
     return tokens
 
@@ -81,9 +84,7 @@ if __name__ == '__main__':
     if not os.path.exists(yaml_path):
         tokens = new_oauth(yaml_path)
     else:
-        yaml_file = open(yaml_path, "r")
-        tokens = yaml.safe_load(yaml_file)
-        yaml_file.close()
+        tokens = load_credentials(yaml_path)
 
     client = pytumblr.TumblrRestClient(
         tokens['consumer_key'],

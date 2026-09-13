@@ -3,6 +3,7 @@ from builtins import str
 from builtins import object
 from .helpers import validate_params, validate_blogname
 from .request import TumblrRequest
+from .request2 import TumblrRequest2
 
 
 class TumblrRestClient(object):
@@ -10,7 +11,7 @@ class TumblrRestClient(object):
     A Python Client for the Tumblr API
     """
 
-    def __init__(self, consumer_key, consumer_secret="", oauth_token="", oauth_secret="", host="https://api.tumblr.com"):
+    def __init__(self, consumer_key="", consumer_secret="", oauth_token="", oauth_secret="", host="https://api.tumblr.com", client_id=None, oauth2_token=None, timeout=30, token_updater=None, allow_custom_host=False):
         """
         Initializes the TumblrRestClient object, creating the TumblrRequest
         object which deals with all request formatting.
@@ -28,7 +29,25 @@ class TumblrRestClient(object):
 
         :returns: None
         """
-        self.request = TumblrRequest(consumer_key, consumer_secret, oauth_token, oauth_secret, host)
+        if client_id is not None or oauth2_token is not None:
+            if client_id is None or oauth2_token is None:
+                raise ValueError("client_id and oauth2_token must be provided together")
+            self.request = TumblrRequest2(
+                client_id, oauth2_token, consumer_secret, host,
+                timeout=timeout, token_updater=token_updater,
+                allow_custom_host=allow_custom_host
+            )
+        else:
+            self.request = TumblrRequest(
+                consumer_key, consumer_secret, oauth_token, oauth_secret,
+                host, timeout=timeout, allow_custom_host=allow_custom_host
+            )
+
+    def refresh_token(self):
+        """Refresh the OAuth 2 token and return the replacement token data."""
+        if not isinstance(self.request, TumblrRequest2):
+            raise ValueError("refresh_token is only available for OAuth2 clients")
+        return self.request.refresh()
 
     def info(self):
         """
@@ -548,7 +567,8 @@ class TumblrRestClient(object):
 
         return self.send_api_request("post", url, params, valid_options)
 
-    def send_api_request(self, method, url, params={}, valid_parameters=[], needs_api_key=False):
+    def send_api_request(self, method, url, params=None,
+                         valid_parameters=None, needs_api_key=False):
         """
         Sends the url with parameters to the requested url, validating them
         to make sure that they are what we expect to have passed to us
@@ -560,23 +580,48 @@ class TumblrRestClient(object):
 
         :returns: a dict parsed from the JSON response
         """
+        params = dict(params or {})
+        valid_parameters = list(valid_parameters or [])
         if needs_api_key:
             params.update({'api_key': self.request.consumer_key})
             valid_parameters.append('api_key')
 
         files = {}
-        if 'data' in params:
-            if isinstance(params['data'], list):
-                for idx, data in enumerate(params['data']):
-                    files['data['+str(idx)+']'] =  open(params['data'][idx], 'rb')
-            else:
-                files = {'data': open(params['data'], 'rb')}
-            del params['data']
+        try:
+            if 'data' in params:
+                if isinstance(params['data'], list):
+                    for idx, data in enumerate(params['data']):
+                        files['data['+str(idx)+']'] = open(
+                            params['data'][idx], 'rb'
+                        )
+                else:
+                    files = {'data': open(params['data'], 'rb')}
+                del params['data']
 
-        validate_params(valid_parameters, params)
-        if method == "get":
-            return self.request.get(url, params)
-        elif method == "delete":
-            return self.request.delete(url, params)
-        else:
-            return self.request.post(url, params, files)
+            validate_params(valid_parameters, params)
+            if method == "get":
+                return self.request.get(url, params)
+            elif method == "delete":
+                return self.request.delete(url, params)
+            else:
+                return self.request.post(url, params, files)
+        finally:
+            for file_object in files.values():
+                file_object.close()
+
+
+class TumblrRestClient2(TumblrRestClient):
+    """Backward-compatible OAuth2 client name proposed in PR #116."""
+
+    def __init__(self, client_id, oauth2_token, client_secret="",
+                 host="https://api.tumblr.com", timeout=30,
+                 token_updater=None, allow_custom_host=False):
+        super(TumblrRestClient2, self).__init__(
+            consumer_secret=client_secret,
+            host=host,
+            client_id=client_id,
+            oauth2_token=oauth2_token,
+            timeout=timeout,
+            token_updater=token_updater,
+            allow_custom_host=allow_custom_host,
+        )

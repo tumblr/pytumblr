@@ -38,6 +38,42 @@ A ``pytumblr.TumblrRestClient`` is the object you'll make all of your calls to t
 
     client.info() # Grabs the current user information
 
+OAuth 2 bearer tokens are also supported. Pass the token response returned by
+Tumblr together with the application client id:
+
+.. code:: python
+
+    client = pytumblr.TumblrRestClient2(
+        '<client_id>',
+        {
+            'access_token': '<access_token>',
+            'refresh_token': '<refresh_token>',
+            'token_type': 'bearer',
+            'expires_in': 2520,
+            'scope': 'basic write offline_access',
+        },
+        client_secret='<client_secret>',
+    )
+
+    client.info()
+
+When the access token expires, call ``client.refresh_token()`` and persist the
+returned token response. Tumblr may rotate the refresh token, so always store
+the complete replacement response.
+
+For an interactive OAuth 2 setup, install ``pytumblr[console]`` and run
+``python interactive_console2.py``. Credential files are written atomically
+and use owner-only permissions where POSIX file modes are supported. Never
+commit them to source control. The console requests only the ``basic`` scope
+by default. Add ``write`` only when the application must change blog content,
+and ``offline_access`` only when refresh tokens are required.
+
+OAuth 2 requests are restricted to ``https://api.tumblr.com`` by default.
+OAuth 2 test servers must use HTTPS and require the explicit
+``allow_custom_host=True`` opt-in; only enable it for a host you control
+because credentials are sent to it. OAuth 1 custom-host behavior is preserved
+for backward compatibility.
+
 Two easy ways to get your credentials to are:
 
 1. The built-in ``interactive_console.py`` tool (if you already have a consumer key & secret)
